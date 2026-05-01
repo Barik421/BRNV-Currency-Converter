@@ -451,10 +451,10 @@ h1 {
   height: 52px;
   place-items: center;
   color: var(--primary-text);
-  background: linear-gradient(145deg, var(--primary), var(--primary-strong));
+  background: var(--surface);
   border: 0;
   border-radius: 999px;
-  box-shadow: 0 14px 30px rgba(230, 57, 70, 0.28);
+  box-shadow: 0 14px 30px rgba(230, 57, 70, 0.28), 0 0 0 5px var(--surface);
   outline: 0;
   transition: filter 180ms ease, transform 160ms ease;
   user-select: none;
@@ -463,18 +463,18 @@ h1 {
 .swap-button:hover,
 .swap-button:focus,
 .swap-button:active {
-  background: linear-gradient(145deg, var(--primary), var(--primary-strong));
+  background: var(--surface);
   color: var(--primary-text);
 }
 
 .swap-button::before {
   content: "";
   position: absolute;
-  inset: -5px;
-  z-index: -1;
-  background: var(--surface);
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(145deg, var(--primary), var(--primary-strong));
   border-radius: inherit;
-  transition: box-shadow 160ms ease;
+  pointer-events: none;
 }
 
 .swap-button::after {
@@ -492,7 +492,7 @@ h1 {
 }
 
 .swap-button:active::before {
-  background: var(--surface);
+  background: linear-gradient(145deg, var(--primary), var(--primary-strong));
 }
 
 .swap-button:active::after {
@@ -501,6 +501,8 @@ h1 {
 
 .swap-icon {
   display: block;
+  position: relative;
+  z-index: 1;
   font-size: 1.45rem;
   line-height: 1;
   transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
