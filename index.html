@@ -26,19 +26,27 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20260501">
 
-  <!-- Google Analytics 4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BPPLNFQSNS"></script>
+  <!-- Google Analytics 4 with Consent Mode v2 -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    let brnvSavedConsent = null;
+    try {
+      brnvSavedConsent = localStorage.getItem('brnvCookieConsent');
+    } catch {}
+    const brnvConsentGranted = brnvSavedConsent === 'accepted';
+    gtag('consent', 'default', {
+      analytics_storage: brnvConsentGranted ? 'granted' : 'denied',
+      ad_storage: brnvConsentGranted ? 'granted' : 'denied',
+      ad_user_data: brnvConsentGranted ? 'granted' : 'denied',
+      ad_personalization: brnvConsentGranted ? 'granted' : 'denied'
+    });
     gtag('js', new Date());
     gtag('config', 'G-BPPLNFQSNS');
   </script>
-
-  <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3597944314037621" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BPPLNFQSNS"></script>
 
   <script type="application/ld+json">
     {
@@ -91,10 +99,18 @@
             },
             {
               "@type": "Question",
-              "name": "Can I convert EUR to USD and USD to EUR?",
+              "name": "Are these rates official bank rates?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes. The converter supports two-way conversion, so typing in either amount field updates the other value automatically."
+                "text": "No. Rates are provided for informational purposes only and may differ from bank, broker or payment-provider rates."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Which currencies are supported?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The converter supports popular currencies including USD, EUR, GBP, UAH, PLN, CAD, AUD, CHF, JPY, CNY, HKD, SGD, NZD, SEK, NOK, DKK, CZK, TRY and AED."
               }
             }
           ]
@@ -179,7 +195,7 @@
       </article>
     </section>
 
-    <section class="sponsor-section" aria-label="Advertisement" data-i18n-attr="aria-label:advertisement" hidden>
+    <section class="sponsor-section" aria-label="Advertisement" data-i18n-attr="aria-label:advertisement">
       <div class="sponsor-card">
         <!-- BRNV Converter Banner -->
         <ins class="adsbygoogle"
@@ -262,6 +278,7 @@
     </section>
   </div>
 
-  <script src="script.js"></script>
+  <script src="consent.js?v=20260501"></script>
+  <script src="script.js?v=20260501"></script>
 </body>
 </html>

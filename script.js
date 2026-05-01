@@ -2,8 +2,7 @@ const API_BASE = "https://open.er-api.com/v6/latest/";
 const STORAGE_KEYS = {
   from: "brnvConverterFromCurrency",
   to: "brnvConverterToCurrency",
-  theme: "brnvConverterTheme",
-  language: "brnvConverterLanguage"
+  theme: "brnvConverterTheme"
 };
 
 const translations = {
@@ -241,11 +240,6 @@ function getCurrency(code) {
 }
 
 function detectInitialLanguage() {
-  const savedLanguage = localStorage.getItem(STORAGE_KEYS.language);
-  if (savedLanguage === "uk" || savedLanguage === "en") {
-    return savedLanguage;
-  }
-
   return "en";
 }
 
@@ -624,18 +618,64 @@ function initAds() {
     return;
   }
 
+  if (adSlot.dataset.brnvAdInitialized === "true") {
+    return;
+  }
+
+  if (!window.BRNVConsent?.canUseAds()) {
+    adSection?.classList.remove("is-visible");
+    window.addEventListener("brnv:consent-changed", initAds, { once: true });
+    return;
+  }
+
+  const revealIfFilled = () => {
+    const isFilled = adSlot.dataset.adsbygoogleStatus === "done"
+      && adSlot.dataset.adStatus === "filled"
+      && Boolean(adSlot.querySelector("iframe"));
+
+    adSection?.classList.toggle("is-visible", isFilled);
+    return isFilled;
+  };
+
   try {
-    (window.adsbygoogle = window.adsbygoogle || []).push({});
-    window.setTimeout(() => {
-      const isFilled = adSlot.dataset.adsbygoogleStatus === "done" && adSlot.innerHTML.trim().length > 0;
-      if (isFilled && adSection) {
-        adSection.hidden = false;
+    adSlot.dataset.brnvAdInitialized = "true";
+
+    const observer = new MutationObserver(() => {
+      if (revealIfFilled()) {
+        observer.disconnect();
       }
-    }, 1800);
-  } catch {
-    if (adSection) {
-      adSection.hidden = true;
+    });
+
+    observer.observe(adSlot, {
+      attributes: true,
+      childList: true,
+      subtree: true
+    });
+
+    const requestAd = () => {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch {
+        adSection?.classList.remove("is-visible");
+      }
+    };
+
+    if (window.adsbygoogle) {
+      requestAd();
+    } else {
+      window.BRNVConsent?.loadAdSense();
+      window.addEventListener("brnv:adsense-ready", requestAd, { once: true });
     }
+
+    [1200, 3000, 6000, 10000].forEach((delay) => {
+      window.setTimeout(() => {
+        if (revealIfFilled()) {
+          observer.disconnect();
+        }
+      }, delay);
+    });
+  } catch {
+    adSection?.classList.remove("is-visible");
   }
 }
 

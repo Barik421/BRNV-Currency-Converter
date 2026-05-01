@@ -546,11 +546,20 @@ h1 {
 }
 
 .sponsor-section {
-  margin-top: 64px;
+  height: 0;
+  margin-top: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: margin-top 220ms ease, opacity 220ms ease;
 }
 
-.sponsor-section[hidden] {
-  display: none;
+.sponsor-section.is-visible {
+  height: auto;
+  margin-top: 64px;
+  overflow: visible;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .popular-section {
@@ -681,6 +690,76 @@ h1 {
 .sponsor-card .adsbygoogle {
   width: 100%;
   min-height: 90px;
+}
+
+.consent-banner {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 80;
+  display: grid;
+  width: min(560px, calc(100vw - 36px));
+  gap: 18px;
+  padding: 20px;
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--primary) 9%, transparent), transparent 48%),
+    color-mix(in srgb, var(--surface) 92%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  box-shadow: 0 24px 70px rgba(28, 18, 20, 0.2);
+  opacity: 0;
+  transform: translateY(18px) scale(0.98);
+  transition: opacity 220ms ease, transform 220ms ease;
+  backdrop-filter: blur(20px);
+}
+
+.consent-banner.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.consent-banner.is-hiding {
+  opacity: 0;
+  transform: translateY(12px) scale(0.98);
+}
+
+.consent-copy {
+  display: grid;
+  gap: 8px;
+}
+
+.consent-eyebrow {
+  color: var(--primary);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.consent-copy h2 {
+  font-size: clamp(1.25rem, 4vw, 1.75rem);
+  letter-spacing: -0.04em;
+}
+
+.consent-copy p {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.consent-copy a {
+  width: fit-content;
+  color: var(--primary);
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.consent-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
 }
 
 .seo-section,
@@ -1004,6 +1083,23 @@ h1 {
   .language-toggle {
     min-width: 46px;
     padding-inline: 11px;
+  }
+
+  .consent-banner {
+    right: 12px;
+    bottom: 12px;
+    width: calc(100vw - 24px);
+    padding: 16px;
+    border-radius: 22px;
+  }
+
+  .consent-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .consent-actions .text-button {
+    width: 100%;
   }
 }
 

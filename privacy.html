@@ -22,15 +22,26 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <!-- Google Analytics 4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BPPLNFQSNS"></script>
+  <link rel="stylesheet" href="styles.css?v=20260501">
+  <!-- Google Analytics 4 with Consent Mode v2 -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    let brnvSavedConsent = null;
+    try {
+      brnvSavedConsent = localStorage.getItem('brnvCookieConsent');
+    } catch {}
+    const brnvConsentGranted = brnvSavedConsent === 'accepted';
+    gtag('consent', 'default', {
+      analytics_storage: brnvConsentGranted ? 'granted' : 'denied',
+      ad_storage: brnvConsentGranted ? 'granted' : 'denied',
+      ad_user_data: brnvConsentGranted ? 'granted' : 'denied',
+      ad_personalization: brnvConsentGranted ? 'granted' : 'denied'
+    });
     gtag('js', new Date());
     gtag('config', 'G-BPPLNFQSNS');
   </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BPPLNFQSNS"></script>
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -73,13 +84,13 @@
       <p>BRNV Currency Converter is a static currency conversion website. It does not require an account and does not ask users to submit personal financial information.</p>
 
       <h2>Local preferences</h2>
-      <p>The site may use your browser's localStorage to remember simple preferences, such as selected currencies, theme, and language. This data stays in your browser and is used only to improve the experience on future visits.</p>
+      <p>The site may use your browser's localStorage to remember simple preferences, such as selected currencies and theme. This data stays in your browser and is used only to improve the experience on future visits.</p>
 
       <h2>Exchange rates</h2>
       <p>The converter requests exchange-rate data from a public currency API directly from your browser. Rates are provided for informational purposes only and may not reflect final bank, broker, or payment-provider rates.</p>
 
       <h2>Analytics and advertising</h2>
-      <p>The site includes placeholder markup for Google Analytics 4 and Google AdSense. If real IDs are added later, Google services may collect usage and advertising data according to Google's own policies.</p>
+      <p>The site uses Google Analytics 4 and may use Google AdSense after consent. Optional analytics and advertising storage is disabled by default through Google Consent Mode until a visitor accepts it.</p>
 
       <h2>Contact</h2>
       <p>If you have questions about privacy or cooperation, contact: <a href="mailto:mbrnvwork@gmail.com">mbrnvwork@gmail.com</a>.</p>
@@ -94,5 +105,6 @@
       <a href="contact.html">Contact</a>
     </nav>
   </footer>
+  <script src="consent.js?v=20260501"></script>
 </body>
 </html>
