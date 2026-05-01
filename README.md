@@ -25,7 +25,7 @@ Open `index.html` locally or publish the repository with GitHub Pages.
 Replace these placeholders before production:
 
 - `G-BPPLNFQSNS` with a different GA4 Measurement ID if you change analytics properties
-- `ca-pub-XXXXXXXXXXXXXXXX` with your real AdSense publisher ID
+- `ca-pub-3597944314037621` with a different AdSense publisher ID if you change accounts
 - `data-ad-slot="XXXXXXXXXX"` with your real AdSense slot ID
 - `https://brnvconverter.com/` with your custom domain in canonical URLs, Open Graph URLs, JSON-LD, `robots.txt`, and `sitemap.xml`
 

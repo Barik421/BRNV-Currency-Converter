@@ -620,7 +620,8 @@ function bindEvents() {
 function initAds() {
   const adSlot = document.querySelector(".adsbygoogle");
   const clientId = adSlot?.dataset.adClient || "";
-  if (!adSlot || clientId.includes("XXXXXXXXXXXXXXXX")) {
+  const slotId = adSlot?.dataset.adSlot || "";
+  if (!adSlot || clientId.includes("XXXXXXXXXXXXXXXX") || slotId.includes("XXXXXXXXXX")) {
     return;
   }
 
