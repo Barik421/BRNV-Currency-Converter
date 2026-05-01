@@ -3,18 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BRNV Currency Converter | Fast Currency Converter</title>
-  <meta name="description" content="BRNV Currency Converter is a simple, fast and clean currency conversion web app with live rates, popular currencies and a premium red and white interface.">
+  <title>BRNV Currency Converter | Live EUR, USD, UAH Exchange Rates</title>
+  <meta name="description" content="Convert EUR, USD, UAH, GBP, PLN and other popular currencies with BRNV Currency Converter. A fast, clean currency converter with live exchange rates.">
+  <meta name="robots" content="index, follow">
+  <meta name="application-name" content="BRNV Currency Converter">
   <meta name="theme-color" content="#e63946">
   <link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
-  <link rel="canonical" href="https://example.com/">
+  <link rel="canonical" href="https://barik421.github.io/BRNV-Currency-Converter/">
 
   <meta property="og:type" content="website">
-  <meta property="og:title" content="BRNV Currency Converter">
-  <meta property="og:description" content="Simple, fast and clean currency conversion.">
-  <meta property="og:url" content="https://example.com/">
+  <meta property="og:title" content="BRNV Currency Converter | Live Exchange Rates">
+  <meta property="og:description" content="Simple, fast and clean currency conversion for EUR, USD, UAH and more.">
+  <meta property="og:url" content="https://barik421.github.io/BRNV-Currency-Converter/">
   <meta property="og:site_name" content="BRNV Currency Converter">
-  <meta property="og:image" content="https://example.com/og-image.png">
+  <meta property="og:image" content="https://barik421.github.io/BRNV-Currency-Converter/icons/favicon.svg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="BRNV Currency Converter">
+  <meta name="twitter:description" content="Fast live currency conversion for EUR, USD, UAH and more.">
+  <meta name="twitter:image" content="https://barik421.github.io/BRNV-Currency-Converter/icons/favicon.svg">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,17 +43,63 @@
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "BRNV Currency Converter",
-      "applicationCategory": "FinanceApplication",
-      "operatingSystem": "Any",
-      "url": "https://example.com/",
-      "description": "Simple, fast and clean currency conversion.",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      }
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://barik421.github.io/BRNV-Currency-Converter/#organization",
+          "name": "BRNV",
+          "url": "https://barik421.github.io/BRNV-Currency-Converter/",
+          "sameAs": ["https://github.com/Barik421"]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://barik421.github.io/BRNV-Currency-Converter/#website",
+          "name": "BRNV Currency Converter",
+          "url": "https://barik421.github.io/BRNV-Currency-Converter/",
+          "publisher": {
+            "@id": "https://barik421.github.io/BRNV-Currency-Converter/#organization"
+          }
+        },
+        {
+          "@type": "WebApplication",
+          "@id": "https://barik421.github.io/BRNV-Currency-Converter/#app",
+          "name": "BRNV Currency Converter",
+          "applicationCategory": "FinanceApplication",
+          "operatingSystem": "Any",
+          "url": "https://barik421.github.io/BRNV-Currency-Converter/",
+          "description": "A fast static currency converter for EUR, USD, UAH, GBP, PLN and other popular currencies.",
+          "publisher": {
+            "@id": "https://barik421.github.io/BRNV-Currency-Converter/#organization"
+          },
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://barik421.github.io/BRNV-Currency-Converter/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How often are exchange rates updated?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "BRNV Currency Converter requests fresh public exchange-rate data when the page loads. Rates are informational and may differ from bank or payment provider rates."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I convert EUR to USD and USD to EUR?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. The converter supports two-way conversion, so typing in either amount field updates the other value automatically."
+              }
+            }
+          ]
+        }
+      ]
     }
   </script>
 </head>
@@ -140,6 +193,40 @@
         <h2 id="popularTitle" data-i18n="popularTitle">Popular conversions</h2>
       </div>
       <div class="popular-grid" id="popularGrid"></div>
+    </section>
+
+    <section class="seo-section" aria-labelledby="seoTitle">
+      <div class="seo-card">
+        <p class="eyebrow" data-i18n="seoEyebrow">Currency exchange made simple</p>
+        <h2 id="seoTitle" data-i18n="seoTitle">Fast online currency converter for everyday rates</h2>
+        <p data-i18n="seoIntro">BRNV Currency Converter helps you quickly compare popular currency pairs such as EUR to USD, USD to EUR, EUR to UAH, USD to UAH, GBP to EUR and PLN to UAH. Enter an amount, choose currencies and get an instant informational conversion.</p>
+        <ul class="seo-list">
+          <li data-i18n="seoPointOne">Two-way conversion: edit either amount field and the other updates automatically.</li>
+          <li data-i18n="seoPointTwo">Popular currencies include USD, EUR, GBP, UAH, PLN, CAD, AUD, CHF, JPY, CNY and more.</li>
+          <li data-i18n="seoPointThree">The site is static, lightweight and works well on mobile devices.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="faq-section" aria-labelledby="faqTitle">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="faqEyebrow">Questions</p>
+        <h2 id="faqTitle" data-i18n="faqTitle">Currency converter FAQ</h2>
+      </div>
+      <div class="faq-grid">
+        <article class="faq-card">
+          <h3 data-i18n="faqOneQuestion">How often are exchange rates updated?</h3>
+          <p data-i18n="faqOneAnswer">The site requests fresh public exchange-rate data when the page loads. During the same visit, some rates may be cached in your browser to keep the converter fast.</p>
+        </article>
+        <article class="faq-card">
+          <h3 data-i18n="faqTwoQuestion">Are these rates official bank rates?</h3>
+          <p data-i18n="faqTwoAnswer">No. Rates are provided for informational purposes only and may differ from bank, broker or payment-provider rates.</p>
+        </article>
+        <article class="faq-card">
+          <h3 data-i18n="faqThreeQuestion">Which currencies are supported?</h3>
+          <p data-i18n="faqThreeAnswer">The converter supports popular currencies including USD, EUR, GBP, UAH, PLN, CAD, AUD, CHF, JPY, CNY, HKD, SGD, NZD, SEK, NOK, DKK, CZK, TRY and AED.</p>
+        </article>
+      </div>
     </section>
   </main>
 

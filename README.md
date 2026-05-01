@@ -12,7 +12,7 @@ A polished static currency converter website for GitHub Pages. Built with plain 
 - Popular conversion cards with compact rates
 - Google Analytics 4 placeholder
 - Google AdSense-ready banner placeholder
-- SEO meta tags, Open Graph tags, and JSON-LD structured data
+- SEO meta tags, Open Graph/Twitter tags, sitemap, robots.txt, FAQ content, and JSON-LD structured data
 
 ## Hosting
 
@@ -27,7 +27,7 @@ Replace these placeholders before production:
 - `G-XXXXXXXXXX` with your real GA4 Measurement ID
 - `ca-pub-XXXXXXXXXXXXXXXX` with your real AdSense publisher ID
 - `data-ad-slot="XXXXXXXXXX"` with your real AdSense slot ID
-- `https://example.com/` with your custom domain
+- `https://barik421.github.io/BRNV-Currency-Converter/` with your custom domain in canonical URLs, Open Graph URLs, JSON-LD, `robots.txt`, and `sitemap.xml`
 
 ## Contact
 
