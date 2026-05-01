@@ -545,7 +545,7 @@ h1 {
   font-weight: 700;
 }
 
-.ad-section {
+.sponsor-section {
   margin-top: 64px;
 }
 
@@ -659,7 +659,7 @@ h1 {
   white-space: nowrap;
 }
 
-.ad-card {
+.sponsor-card {
   display: grid;
   min-height: 118px;
   place-items: center;
@@ -674,7 +674,7 @@ h1 {
   text-align: center;
 }
 
-.ad-card > span {
+.sponsor-placeholder {
   display: inline-grid;
   min-height: 56px;
   place-items: center;
@@ -683,6 +683,11 @@ h1 {
   border: 1px solid var(--line);
   border-radius: 999px;
   font-weight: 800;
+}
+
+.sponsor-card .adsbygoogle {
+  width: 100%;
+  min-height: 90px;
 }
 
 .seo-section,
