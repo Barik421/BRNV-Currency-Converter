@@ -450,7 +450,7 @@ h1 {
   width: 52px;
   height: 52px;
   place-items: center;
-  color: var(--primary-text);
+  color: #ffffff;
   background: var(--surface);
   border: 0;
   border-radius: 999px;
@@ -464,7 +464,7 @@ h1 {
 .swap-button:focus,
 .swap-button:active {
   background: var(--surface);
-  color: var(--primary-text);
+  color: #ffffff;
 }
 
 .swap-button::before {
@@ -502,14 +502,11 @@ h1 {
 .swap-icon {
   display: block;
   position: relative;
-  z-index: 1;
+  z-index: 2;
   width: 26px;
   height: 26px;
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 2.4;
+  color: #ffffff;
+  pointer-events: none;
   transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
