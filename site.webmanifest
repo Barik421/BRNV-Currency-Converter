@@ -1,0 +1,21 @@
+{
+  "name": "BRNV Currency Converter",
+  "short_name": "BRNV Converter",
+  "description": "A fast, clean currency converter for EUR, USD, UAH and other popular currencies.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#e63946",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
