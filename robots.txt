@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://barik421.github.io/BRNV-Currency-Converter/sitemap.xml
+Sitemap: https://brnvconverter.com/sitemap.xml

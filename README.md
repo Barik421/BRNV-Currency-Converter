@@ -27,7 +27,7 @@ Replace these placeholders before production:
 - `G-BPPLNFQSNS` with a different GA4 Measurement ID if you change analytics properties
 - `ca-pub-XXXXXXXXXXXXXXXX` with your real AdSense publisher ID
 - `data-ad-slot="XXXXXXXXXX"` with your real AdSense slot ID
-- `https://barik421.github.io/BRNV-Currency-Converter/` with your custom domain in canonical URLs, Open Graph URLs, JSON-LD, `robots.txt`, and `sitemap.xml`
+- `https://brnvconverter.com/` with your custom domain in canonical URLs, Open Graph URLs, JSON-LD, `robots.txt`, and `sitemap.xml`
 
 ## Contact
 
