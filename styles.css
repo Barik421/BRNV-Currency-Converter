@@ -503,8 +503,13 @@ h1 {
   display: block;
   position: relative;
   z-index: 1;
-  font-size: 1.45rem;
-  line-height: 1;
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.4;
   transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
