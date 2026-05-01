@@ -25,7 +25,6 @@ const translations = {
     rateLoadError: "Please try again in a moment.",
     disclaimer: "Rates are provided for informational purposes only.",
     advertisement: "Advertisement",
-    adPlaceholder: "Google Ad Banner",
     popularEyebrow: "Quick routes",
     popularTitle: "Popular conversions",
     toWord: "to",
@@ -95,7 +94,6 @@ const translations = {
     rateLoadError: "Спробуйте ще раз за мить.",
     disclaimer: "Курси надаються лише з інформаційною метою.",
     advertisement: "Реклама",
-    adPlaceholder: "Google Ad банер",
     popularEyebrow: "Швидкі напрямки",
     popularTitle: "Популярні конвертації",
     toWord: "у",
@@ -619,6 +617,7 @@ function bindEvents() {
 
 function initAds() {
   const adSlot = document.querySelector(".adsbygoogle");
+  const adSection = document.querySelector(".sponsor-section");
   const clientId = adSlot?.dataset.adClient || "";
   const slotId = adSlot?.dataset.adSlot || "";
   if (!adSlot || clientId.includes("XXXXXXXXXXXXXXXX") || slotId.includes("XXXXXXXXXX")) {
@@ -627,8 +626,16 @@ function initAds() {
 
   try {
     (window.adsbygoogle = window.adsbygoogle || []).push({});
+    window.setTimeout(() => {
+      const isFilled = adSlot.dataset.adsbygoogleStatus === "done" && adSlot.innerHTML.trim().length > 0;
+      if (isFilled && adSection) {
+        adSection.hidden = false;
+      }
+    }, 1800);
   } catch {
-    // AdSense may be blocked locally; the placeholder remains layout-safe.
+    if (adSection) {
+      adSection.hidden = true;
+    }
   }
 }
 
