@@ -26,7 +26,7 @@ Replace these placeholders before production:
 
 - `G-BPPLNFQSNS` with a different GA4 Measurement ID if you change analytics properties
 - `ca-pub-3597944314037621` with a different AdSense publisher ID if you change accounts
-- `data-ad-slot="XXXXXXXXXX"` with your real AdSense slot ID
+- `data-ad-slot="5002789120"` with a different AdSense slot ID if you change ad units
 - `https://brnvconverter.com/` with your custom domain in canonical URLs, Open Graph URLs, JSON-LD, `robots.txt`, and `sitemap.xml`
 
 ## Contact
