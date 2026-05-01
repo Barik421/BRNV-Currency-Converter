@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BRNV Currency Converter | Fast Currency Converter</title>
+  <meta name="description" content="BRNV Currency Converter is a simple, fast and clean currency conversion web app with live rates, popular currencies and a premium red and white interface.">
+  <meta name="theme-color" content="#e63946">
+  <link rel="canonical" href="https://example.com/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="BRNV Currency Converter">
+  <meta property="og:description" content="Simple, fast and clean currency conversion.">
+  <meta property="og:url" content="https://example.com/">
+  <meta property="og:site_name" content="BRNV Currency Converter">
+  <meta property="og:image" content="https://example.com/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Google Analytics 4: replace G-XXXXXXXXXX with your real Measurement ID. -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+
+  <!-- Google AdSense: replace ca-pub-XXXXXXXXXXXXXXXX with your real publisher ID. -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "BRNV Currency Converter",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "url": "https://example.com/",
+      "description": "Simple, fast and clean currency conversion.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="BRNV Currency Converter home" data-i18n-attr="aria-label:brandHome">
+      <span class="brand-mark">B</span>
+      <span>BRNV Converter</span>
+    </a>
+    <div class="header-actions">
+      <button class="language-toggle pressable" id="languageToggle" type="button" aria-label="Switch language" data-i18n-attr="aria-label:languageToggle">
+        <span id="languageLabel">UA</span>
+      </button>
+      <button class="theme-toggle pressable" id="themeToggle" type="button" aria-label="Switch theme">
+        <span class="theme-toggle__icon" aria-hidden="true">☀</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="pageTitle">
+      <p class="eyebrow" data-i18n="heroEyebrow">Premium exchange utility</p>
+      <h1 id="pageTitle" data-i18n="heroTitle">BRNV Currency Converter</h1>
+      <p data-i18n="heroSubtitle">Simple, fast and clean currency conversion</p>
+    </section>
+
+    <section class="converter-shell" aria-labelledby="converterTitle">
+      <div class="glow glow--red" aria-hidden="true"></div>
+      <div class="glow glow--soft" aria-hidden="true"></div>
+
+      <article class="converter-card">
+        <h2 id="converterTitle" class="sr-only" data-i18n="converterTitle">Currency converter</h2>
+
+        <div class="status-line" id="statusLine" role="status" aria-live="polite">Loading latest exchange rates...</div>
+
+        <div class="converter-fields" id="converterFields">
+          <div class="currency-row" id="fromRow">
+            <label class="row-label" for="fromAmount" data-i18n="fromLabel">From</label>
+            <span class="input-shell">
+              <input id="fromAmount" type="number" inputmode="decimal" min="0" step="any" placeholder="0.00" autocomplete="off">
+              <button class="currency-button pressable" id="fromCurrencyButton" type="button" aria-haspopup="dialog">
+                <span class="currency-flag" id="fromFlag">🇪🇺</span>
+                <span class="currency-code" id="fromCode">EUR</span>
+                <span aria-hidden="true">⌄</span>
+              </button>
+            </span>
+          </div>
+
+          <div class="swap-row" aria-hidden="false">
+            <button class="swap-button pressable" id="swapButton" type="button" aria-label="Swap currencies" data-i18n-attr="aria-label:swapCurrencies">
+              <span aria-hidden="true">⇅</span>
+            </button>
+          </div>
+
+          <div class="currency-row" id="toRow">
+            <label class="row-label" for="toAmount" data-i18n="toLabel">To</label>
+            <span class="input-shell">
+              <input id="toAmount" type="number" inputmode="decimal" min="0" step="any" placeholder="0.00" autocomplete="off">
+              <button class="currency-button pressable" id="toCurrencyButton" type="button" aria-haspopup="dialog">
+                <span class="currency-flag" id="toFlag">🇺🇸</span>
+                <span class="currency-code" id="toCode">USD</span>
+                <span aria-hidden="true">⌄</span>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="rate-panel">
+          <p id="forwardRate">1 EUR = ... USD</p>
+          <p id="reverseRate">1 USD = ... EUR</p>
+          <p class="disclaimer" data-i18n="disclaimer">Rates are provided for informational purposes only.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="ad-section" aria-label="Advertisement" data-i18n-attr="aria-label:advertisement">
+      <div class="ad-card">
+        <span data-i18n="adPlaceholder">Google Ad Banner</span>
+        <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+          data-ad-slot="XXXXXXXXXX"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      </div>
+    </section>
+
+    <section class="popular-section" aria-labelledby="popularTitle">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="popularEyebrow">Quick routes</p>
+        <h2 id="popularTitle" data-i18n="popularTitle">Popular conversions</h2>
+      </div>
+      <div class="popular-grid" id="popularGrid"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p><span data-i18n="cooperation">For cooperation:</span> <a href="mailto:mbrnvwork@gmail.com">mbrnvwork@gmail.com</a></p>
+    <nav aria-label="Footer">
+      <a href="#" data-i18n="privacy">Privacy Policy</a>
+      <a href="#" data-i18n="about">About</a>
+      <a href="#" data-i18n="contact">Contact</a>
+    </nav>
+  </footer>
+
+  <div class="modal" id="currencyModal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal></div>
+    <section class="currency-sheet" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="sheet-handle" aria-hidden="true"></div>
+      <div class="sheet-header">
+        <div>
+          <p class="eyebrow" data-i18n="currenciesEyebrow">Currencies</p>
+          <h2 id="modalTitle" data-i18n="selectCurrency">Select Currency</h2>
+        </div>
+        <button class="close-button pressable" type="button" data-close-modal aria-label="Close currency selector" data-i18n-attr="aria-label:closeCurrencySelector">×</button>
+      </div>
+      <label class="search-shell">
+        <span aria-hidden="true">⌕</span>
+        <input id="currencySearch" type="search" placeholder="Search currency..." autocomplete="off" data-i18n-attr="placeholder:searchPlaceholder">
+      </label>
+      <div class="currency-list" id="currencyList"></div>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
