@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BRNV Converter</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main class="popup-shell" aria-label="BRNV Currency Converter">
+    <header class="popup-header">
+      <div class="brand-lockup">
+        <span class="brand-mark" aria-hidden="true">B</span>
+        <span>
+          <span class="title">BRNV Converter</span>
+          <span class="subtitle">Currency & crypto conversion</span>
+        </span>
+      </div>
+      <button class="icon-button pressable" id="themeToggle" type="button" aria-label="Switch theme">
+        <span id="themeIcon" aria-hidden="true">☀</span>
+      </button>
+    </header>
+
+    <section class="converter-card" aria-label="Currency converter">
+      <p class="status-line" id="statusLine" role="status" aria-live="polite">Loading latest rates...</p>
+
+      <div class="field-stack">
+        <label class="amount-field" for="fromAmount">
+          <span class="field-label">From</span>
+          <span class="field-control">
+            <input id="fromAmount" type="number" inputmode="decimal" min="0" step="any" placeholder="0.00" autocomplete="off">
+            <button class="currency-button pressable" id="fromCurrencyButton" type="button" aria-haspopup="dialog">
+              <span class="currency-flag" id="fromFlag" aria-hidden="true">🇪🇺</span>
+              <span class="currency-code" id="fromCode">EUR</span>
+              <span class="chevron" aria-hidden="true">⌄</span>
+            </button>
+          </span>
+        </label>
+
+        <div class="swap-slot">
+          <button class="swap-button pressable" id="swapButton" type="button" aria-label="Swap currencies">
+            <svg class="swap-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 4v14"></path>
+              <path d="m3.5 14.5 3.5 3.5 3.5-3.5"></path>
+              <path d="M17 20V6"></path>
+              <path d="m13.5 9.5 3.5-3.5 3.5 3.5"></path>
+            </svg>
+          </button>
+        </div>
+
+        <label class="amount-field" for="toAmount">
+          <span class="field-label">To</span>
+          <span class="field-control">
+            <input id="toAmount" type="number" inputmode="decimal" min="0" step="any" placeholder="0.00" autocomplete="off">
+            <button class="currency-button pressable" id="toCurrencyButton" type="button" aria-haspopup="dialog">
+              <span class="currency-flag" id="toFlag" aria-hidden="true">🇺🇸</span>
+              <span class="currency-code" id="toCode">USD</span>
+              <span class="chevron" aria-hidden="true">⌄</span>
+            </button>
+          </span>
+        </label>
+      </div>
+
+      <div class="rate-panel" aria-live="polite">
+        <p id="forwardRate">1 EUR = - USD</p>
+        <p id="reverseRate">1 USD = - EUR</p>
+      </div>
+      <p class="disclaimer">Rates are provided for informational purposes only.</p>
+    </section>
+
+    <button class="website-button pressable" id="openWebsite" type="button">
+      Open website
+    </button>
+  </main>
+
+  <section class="currency-modal" id="currencyModal" aria-hidden="true" aria-labelledby="modalTitle" role="dialog">
+    <div class="modal-backdrop" id="modalBackdrop" tabindex="-1"></div>
+    <div class="modal-sheet" role="document">
+      <div class="modal-header">
+        <div>
+          <h2 id="modalTitle">Select currency</h2>
+          <p id="modalHint">Choose a popular currency</p>
+        </div>
+        <button class="icon-button pressable" id="closeModal" type="button" aria-label="Close currency selector">×</button>
+      </div>
+      <label class="search-box" for="currencySearch">
+        <span aria-hidden="true">⌕</span>
+        <input id="currencySearch" type="search" placeholder="Search currency..." autocomplete="off">
+      </label>
+      <div class="currency-list" id="currencyList" role="listbox"></div>
+    </div>
+  </section>
+
+  <script src="popup.js"></script>
+</body>
+</html>

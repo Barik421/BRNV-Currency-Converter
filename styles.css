@@ -428,7 +428,13 @@ h1 {
 }
 
 .currency-flag {
+  display: inline-grid;
+  width: 1.65em;
+  min-width: 1.65em;
+  place-items: center;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
   font-size: 1.3rem;
+  line-height: 1;
 }
 
 .swap-row {
