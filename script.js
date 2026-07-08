@@ -1,4 +1,5 @@
 const API_BASE = "https://open.er-api.com/v6/latest/";
+const CRYPTO_API = "https://api.coingecko.com/api/v3/simple/price";
 const STORAGE_KEYS = {
   from: "brnvConverterFromCurrency",
   to: "brnvConverterToCurrency",
@@ -52,7 +53,7 @@ const translations = {
     faqTwoQuestion: "Are these rates official bank rates?",
     faqTwoAnswer: "No. Rates are provided for informational purposes only and may differ from bank, broker or payment-provider rates.",
     faqThreeQuestion: "Which currencies are supported?",
-    faqThreeAnswer: "The converter supports popular currencies including USD, EUR, GBP, UAH, PLN, CAD, AUD, CHF, JPY, CNY, HKD, SGD, NZD, SEK, NOK, DKK, CZK, TRY and AED.",
+    faqThreeAnswer: "The converter supports popular currencies and crypto assets including USD, EUR, UAH, BTC, ETH, USDT, USDC, BNB, SOL, XRP and more.",
     currencyNames: {
       USD: "US Dollar",
       EUR: "Euro",
@@ -72,7 +73,26 @@ const translations = {
       DKK: "Danish Krone",
       CZK: "Czech Koruna",
       TRY: "Turkish Lira",
-      AED: "UAE Dirham"
+      AED: "UAE Dirham",
+      BTC: "Bitcoin",
+      ETH: "Ethereum",
+      USDT: "Tether",
+      USDC: "USD Coin",
+      BNB: "BNB",
+      SOL: "Solana",
+      XRP: "XRP",
+      DOGE: "Dogecoin",
+      ADA: "Cardano",
+      TRX: "TRON",
+      TON: "Toncoin",
+      AVAX: "Avalanche",
+      SHIB: "Shiba Inu",
+      DOT: "Polkadot",
+      LINK: "Chainlink",
+      BCH: "Bitcoin Cash",
+      LTC: "Litecoin",
+      XLM: "Stellar",
+      SUI: "Sui"
     }
   },
   uk: {
@@ -121,7 +141,7 @@ const translations = {
     faqTwoQuestion: "Це офіційні банківські курси?",
     faqTwoAnswer: "Ні. Курси надаються лише з інформаційною метою й можуть відрізнятися від курсів банків, брокерів або платіжних сервісів.",
     faqThreeQuestion: "Які валюти підтримуються?",
-    faqThreeAnswer: "Конвертер підтримує популярні валюти, зокрема USD, EUR, GBP, UAH, PLN, CAD, AUD, CHF, JPY, CNY, HKD, SGD, NZD, SEK, NOK, DKK, CZK, TRY та AED.",
+    faqThreeAnswer: "Конвертер підтримує популярні валюти та криптоактиви, зокрема USD, EUR, UAH, BTC, ETH, USDT, USDC, BNB, SOL, XRP та інші.",
     currencyNames: {
       USD: "Долар США",
       EUR: "Євро",
@@ -141,9 +161,50 @@ const translations = {
       DKK: "Данська крона",
       CZK: "Чеська крона",
       TRY: "Турецька ліра",
-      AED: "Дирхам ОАЕ"
+      AED: "Дирхам ОАЕ",
+      BTC: "Біткоїн",
+      ETH: "Ефіріум",
+      USDT: "Tether",
+      USDC: "USD Coin",
+      BNB: "BNB",
+      SOL: "Solana",
+      XRP: "XRP",
+      DOGE: "Dogecoin",
+      ADA: "Cardano",
+      TRX: "TRON",
+      TON: "Toncoin",
+      AVAX: "Avalanche",
+      SHIB: "Shiba Inu",
+      DOT: "Polkadot",
+      LINK: "Chainlink",
+      BCH: "Bitcoin Cash",
+      LTC: "Litecoin",
+      XLM: "Stellar",
+      SUI: "Sui"
     }
   }
+};
+
+const cryptoIds = {
+  BTC: "bitcoin",
+  ETH: "ethereum",
+  USDT: "tether",
+  USDC: "usd-coin",
+  BNB: "binancecoin",
+  SOL: "solana",
+  XRP: "ripple",
+  DOGE: "dogecoin",
+  ADA: "cardano",
+  TRX: "tron",
+  TON: "the-open-network",
+  AVAX: "avalanche-2",
+  SHIB: "shiba-inu",
+  DOT: "polkadot",
+  LINK: "chainlink",
+  BCH: "bitcoin-cash",
+  LTC: "litecoin",
+  XLM: "stellar",
+  SUI: "sui"
 };
 
 const currencies = [
@@ -165,7 +226,26 @@ const currencies = [
   { code: "DKK", name: "Danish Krone", flag: "🇩🇰" },
   { code: "CZK", name: "Czech Koruna", flag: "🇨🇿" },
   { code: "TRY", name: "Turkish Lira", flag: "🇹🇷" },
-  { code: "AED", name: "UAE Dirham", flag: "🇦🇪" }
+  { code: "AED", name: "UAE Dirham", flag: "🇦🇪" },
+  { code: "BTC", name: "Bitcoin", flag: "₿" },
+  { code: "ETH", name: "Ethereum", flag: "Ξ" },
+  { code: "USDT", name: "Tether", flag: "₮" },
+  { code: "USDC", name: "USD Coin", flag: "$" },
+  { code: "BNB", name: "BNB", flag: "◆" },
+  { code: "SOL", name: "Solana", flag: "◎" },
+  { code: "XRP", name: "XRP", flag: "✕" },
+  { code: "DOGE", name: "Dogecoin", flag: "Ð" },
+  { code: "ADA", name: "Cardano", flag: "₳" },
+  { code: "TRX", name: "TRON", flag: "T" },
+  { code: "TON", name: "Toncoin", flag: "◈" },
+  { code: "AVAX", name: "Avalanche", flag: "A" },
+  { code: "SHIB", name: "Shiba Inu", flag: "S" },
+  { code: "DOT", name: "Polkadot", flag: "●" },
+  { code: "LINK", name: "Chainlink", flag: "⬡" },
+  { code: "BCH", name: "Bitcoin Cash", flag: "Ƀ" },
+  { code: "LTC", name: "Litecoin", flag: "Ł" },
+  { code: "XLM", name: "Stellar", flag: "*" },
+  { code: "SUI", name: "Sui", flag: "S" }
 ];
 
 const popularConversions = [
@@ -175,9 +255,9 @@ const popularConversions = [
   ["USD", "UAH"],
   ["GBP", "EUR"],
   ["PLN", "UAH"],
-  ["CNY", "USD"],
-  ["CAD", "USD"],
-  ["AUD", "USD"]
+  ["BTC", "USD"],
+  ["ETH", "USD"],
+  ["USDT", "UAH"]
 ];
 
 const state = {
@@ -187,6 +267,7 @@ const state = {
   activeInput: "from",
   selectingSide: "from",
   ratesCache: new Map(),
+  cryptoUsdCache: null,
   isReady: false,
   requestToken: 0
 };
@@ -281,25 +362,33 @@ function applyLanguage(language, shouldSave = false) {
   }
 }
 
+function getPrecision(value) {
+  const absolute = Math.abs(value);
+  if (absolute >= 100) return 2;
+  if (absolute >= 1) return 4;
+  if (absolute >= 0.0001) return 8;
+  return 10;
+}
+
 function formatAmount(value) {
   if (!Number.isFinite(value)) return "";
   return new Intl.NumberFormat("en-US", {
     useGrouping: false,
-    maximumFractionDigits: value >= 100 ? 2 : 4
+    maximumFractionDigits: getPrecision(value)
   }).format(value);
 }
 
 function formatRate(value) {
   if (!Number.isFinite(value)) return "...";
   return new Intl.NumberFormat("en-US", {
-    maximumFractionDigits: value >= 10 ? 4 : 6
+    maximumFractionDigits: getPrecision(value)
   }).format(value);
 }
 
 function formatPopularRate(value) {
   if (!Number.isFinite(value)) return "N/A";
   return new Intl.NumberFormat("en-US", {
-    maximumFractionDigits: value >= 10 ? 2 : 4,
+    maximumFractionDigits: value >= 10 ? 2 : getPrecision(value),
     minimumFractionDigits: value >= 10 ? 0 : 2
   }).format(value);
 }
@@ -335,6 +424,10 @@ function initTheme() {
   applyTheme(savedTheme || systemTheme);
 }
 
+function isCrypto(code) {
+  return Boolean(cryptoIds[code]);
+}
+
 async function fetchRates(base) {
   if (state.ratesCache.has(base)) {
     return state.ratesCache.get(base);
@@ -355,9 +448,59 @@ async function fetchRates(base) {
   return rates;
 }
 
+async function fetchCryptoUsdRates() {
+  if (state.cryptoUsdCache) {
+    return state.cryptoUsdCache;
+  }
+
+  const ids = Object.values(cryptoIds).join(",");
+  const response = await fetch(`${CRYPTO_API}?ids=${ids}&vs_currencies=usd`);
+  if (!response.ok) {
+    throw new Error("Could not load crypto rates.");
+  }
+
+  const data = await response.json();
+  const rates = {};
+  Object.entries(cryptoIds).forEach(([code, id]) => {
+    const usdRate = data[id]?.usd;
+    if (Number.isFinite(usdRate)) {
+      rates[code] = usdRate;
+    }
+  });
+
+  state.cryptoUsdCache = rates;
+  return rates;
+}
+
+async function getUsdValue(code) {
+  if (code === "USD") return 1;
+
+  if (isCrypto(code)) {
+    const cryptoRates = await fetchCryptoUsdRates();
+    const cryptoUsd = cryptoRates[code];
+    if (!Number.isFinite(cryptoUsd)) {
+      throw new Error(`Rate for ${code} to USD is not available.`);
+    }
+    return cryptoUsd;
+  }
+
+  const usdRates = await fetchRates("USD");
+  const fiatRate = usdRates[code];
+  if (!Number.isFinite(fiatRate)) {
+    throw new Error(`Rate for USD to ${code} is not available.`);
+  }
+  return 1 / fiatRate;
+}
+
 async function getRate(from, to) {
-  const rates = await fetchRates(from);
-  const rate = rates[to];
+  if (from === to) return 1;
+
+  const [fromUsd, toUsd] = await Promise.all([
+    getUsdValue(from),
+    getUsdValue(to)
+  ]);
+
+  const rate = fromUsd / toUsd;
   if (!Number.isFinite(rate)) {
     throw new Error(`Rate for ${from} to ${to} is not available.`);
   }
