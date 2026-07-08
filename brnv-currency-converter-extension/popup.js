@@ -1,7 +1,11 @@
 const API_BASE = "https://open.er-api.com/v6/latest/";
 const CRYPTO_API = "https://api.coingecko.com/api/v3/simple/price";
 const WEBSITE_URL = "https://brnvconverter.com";
+const STORE_URL = "https://chromewebstore.google.com/detail/inbpgndjafnnohkdipdcfpdcckjabhlb";
 const STORAGE_KEY = "brnvCurrencyConverterState";
+const RATING_PROMPT_AFTER = 7;
+const RATING_REMIND_AFTER = 10;
+const RATING_COUNT_COOLDOWN_MS = 3000;
 
 const currencies = [
   { code: "USD", name: "US Dollar", flag: "🇺🇸", aliases: "долар доллар долар сша доллар сша американський долар американский доллар" },
@@ -77,7 +81,13 @@ const state = {
   cryptoUsdRates: null,
   isReady: false,
   isRestoring: true,
-  requestToken: 0
+  requestToken: 0,
+  conversionCount: 0,
+  ratingPromptNextAt: RATING_PROMPT_AFTER,
+  ratingPromptDismissed: false,
+  hasCountedCurrentInput: false,
+  hasUserInteracted: false,
+  lastRatingCountAt: 0
 };
 
 const els = {
@@ -97,6 +107,10 @@ const els = {
   reverseRate: document.getElementById("reverseRate"),
   swapButton: document.getElementById("swapButton"),
   openWebsite: document.getElementById("openWebsite"),
+  ratingCard: document.getElementById("ratingCard"),
+  rateExtension: document.getElementById("rateExtension"),
+  rateLater: document.getElementById("rateLater"),
+  dismissRating: document.getElementById("dismissRating"),
   modal: document.getElementById("currencyModal"),
   modalHint: document.getElementById("modalHint"),
   modalBackdrop: document.getElementById("modalBackdrop"),
@@ -206,6 +220,32 @@ function updateRateText() {
     : `1 ${state.toCurrency} = - ${state.fromCurrency}`;
 }
 
+function shouldShowRatingPrompt() {
+  return !state.ratingPromptDismissed && state.conversionCount >= state.ratingPromptNextAt;
+}
+
+function updateRatingPrompt() {
+  if (!els.ratingCard) return;
+  els.ratingCard.hidden = !shouldShowRatingPrompt();
+}
+
+function recordSuccessfulConversion() {
+  const now = Date.now();
+  if (
+    state.isRestoring
+    || !state.hasUserInteracted
+    || state.hasCountedCurrentInput
+    || now - state.lastRatingCountAt < RATING_COUNT_COOLDOWN_MS
+  ) {
+    return;
+  }
+
+  state.conversionCount += 1;
+  state.lastRatingCountAt = now;
+  state.hasCountedCurrentInput = true;
+  updateRatingPrompt();
+}
+
 function convertFromActiveInput() {
   updateCurrencyButtons();
   updateRateText();
@@ -227,6 +267,7 @@ function convertFromActiveInput() {
     state.lastAmount = els.toAmount.value;
   }
 
+  recordSuccessfulConversion();
   saveState();
 }
 
@@ -300,7 +341,10 @@ function saveState() {
       toCurrency: state.toCurrency,
       lastAmount: state.lastAmount,
       activeInput: state.activeInput,
-      theme: state.theme
+      theme: state.theme,
+      conversionCount: state.conversionCount,
+      ratingPromptNextAt: state.ratingPromptNextAt,
+      ratingPromptDismissed: state.ratingPromptDismissed
     }
   });
 }
@@ -314,6 +358,9 @@ async function restoreState() {
     state.lastAmount = saved.lastAmount || state.lastAmount;
     state.activeInput = saved.activeInput || state.activeInput;
     state.theme = saved.theme || state.theme;
+    state.conversionCount = Number.isFinite(saved.conversionCount) ? saved.conversionCount : state.conversionCount;
+    state.ratingPromptNextAt = Number.isFinite(saved.ratingPromptNextAt) ? saved.ratingPromptNextAt : state.ratingPromptNextAt;
+    state.ratingPromptDismissed = Boolean(saved.ratingPromptDismissed);
   }
 
   const activeAmount = state.lastAmount || "1";
@@ -384,6 +431,8 @@ function selectCurrency(code) {
   }
 
   closeCurrencyModal();
+  state.hasUserInteracted = true;
+  state.hasCountedCurrentInput = false;
   updateCurrencyButtons();
   saveState();
   fetchRates();
@@ -396,6 +445,8 @@ function swapCurrencies() {
   state.activeInput = "from";
   els.fromAmount.value = els.toAmount.value || els.fromAmount.value || state.lastAmount;
   state.lastAmount = els.fromAmount.value;
+  state.hasUserInteracted = true;
+  state.hasCountedCurrentInput = false;
 
   els.swapButton.classList.remove("is-spinning");
   requestAnimationFrame(() => {
@@ -407,13 +458,36 @@ function swapCurrencies() {
   fetchRates();
 }
 
-function openWebsite() {
+function openExternalUrl(url) {
   if (globalThis.chrome?.tabs?.create) {
-    globalThis.chrome.tabs.create({ url: WEBSITE_URL });
+    globalThis.chrome.tabs.create({ url });
     return;
   }
 
-  window.open(WEBSITE_URL, "_blank", "noopener");
+  window.open(url, "_blank", "noopener");
+}
+
+function openWebsite() {
+  openExternalUrl(WEBSITE_URL);
+}
+
+function openStoreRating() {
+  state.ratingPromptDismissed = true;
+  updateRatingPrompt();
+  saveState();
+  openExternalUrl(STORE_URL);
+}
+
+function remindRatingLater() {
+  state.ratingPromptNextAt = state.conversionCount + RATING_REMIND_AFTER;
+  updateRatingPrompt();
+  saveState();
+}
+
+function dismissRatingPrompt() {
+  state.ratingPromptDismissed = true;
+  updateRatingPrompt();
+  saveState();
 }
 
 function bindEvents() {
@@ -426,12 +500,16 @@ function bindEvents() {
   els.fromAmount.addEventListener("input", () => {
     state.activeInput = "from";
     state.lastAmount = els.fromAmount.value;
+    state.hasUserInteracted = true;
+    state.hasCountedCurrentInput = false;
     convertFromActiveInput();
   });
 
   els.toAmount.addEventListener("input", () => {
     state.activeInput = "to";
     state.lastAmount = els.toAmount.value;
+    state.hasUserInteracted = true;
+    state.hasCountedCurrentInput = false;
     convertFromActiveInput();
   });
 
@@ -439,6 +517,9 @@ function bindEvents() {
   els.toButton.addEventListener("click", () => openCurrencyModal("to"));
   els.swapButton.addEventListener("click", swapCurrencies);
   els.openWebsite.addEventListener("click", openWebsite);
+  els.rateExtension?.addEventListener("click", openStoreRating);
+  els.rateLater?.addEventListener("click", remindRatingLater);
+  els.dismissRating?.addEventListener("click", dismissRatingPrompt);
   els.closeModal.addEventListener("click", closeCurrencyModal);
   els.modalBackdrop.addEventListener("click", closeCurrencyModal);
   els.currencySearch.addEventListener("input", renderCurrencyList);
@@ -463,6 +544,7 @@ async function init() {
   applyTheme();
   updateCurrencyButtons();
   updateRateText();
+  updateRatingPrompt();
   fetchRates();
 }
 

@@ -330,6 +330,71 @@ input.is-updating {
   line-height: 1.35;
 }
 
+.rating-card {
+  display: grid;
+  gap: 7px;
+  padding: 12px;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow-soft);
+}
+
+.rating-card[hidden] {
+  display: none;
+}
+
+.rating-title,
+.rating-copy {
+  margin: 0;
+}
+
+.rating-title {
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+.rating-copy {
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 620;
+  line-height: 1.35;
+}
+
+.rating-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  align-items: center;
+}
+
+.rating-button,
+.rating-link {
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 820;
+}
+
+.rating-button {
+  color: var(--text);
+  background: var(--surface-low);
+  border: 1px solid var(--line);
+}
+
+.rating-button--primary {
+  color: var(--primary-text);
+  background: linear-gradient(145deg, var(--primary), var(--primary-strong));
+  border-color: transparent;
+}
+
+.rating-link {
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+}
+
 .website-button {
   justify-self: center;
   min-height: 32px;
