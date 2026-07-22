@@ -1,7 +1,7 @@
 {
   "name": "BRNV Currency Converter",
   "short_name": "BRNV Converter",
-  "description": "A fast, clean currency converter for EUR, USD, UAH and other popular currencies.",
+  "description": "A fast, clean currency converter for EUR, USD, UAH, HUF, crypto and other popular currencies.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
