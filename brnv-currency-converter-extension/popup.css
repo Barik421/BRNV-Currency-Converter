@@ -518,14 +518,32 @@ input.is-updating {
   padding-right: 2px;
 }
 
+.currency-section {
+  display: grid;
+  gap: 5px;
+}
+
+.currency-section + .currency-section {
+  margin-top: 8px;
+}
+
+.currency-section-title {
+  margin: 2px 4px 0;
+  color: var(--muted);
+  font-size: 0.66rem;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
 .currency-row {
   display: grid;
-  grid-template-columns: 32px 48px 1fr;
+  grid-template-columns: minmax(0, 1fr) 34px;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
   width: 100%;
   min-height: 48px;
-  padding: 8px 10px;
+  padding: 3px;
   color: var(--text);
   background: transparent;
   border: 1px solid transparent;
@@ -538,6 +556,55 @@ input.is-updating {
 .currency-row.is-selected {
   background: var(--surface-low);
   border-color: var(--line);
+}
+
+.currency-row__select {
+  display: grid;
+  grid-template-columns: 32px 48px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  min-height: 40px;
+  padding: 5px 7px;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 12px;
+  text-align: left;
+}
+
+.currency-row__select:hover,
+.currency-row__select:focus-visible {
+  background: color-mix(in srgb, var(--primary) 7%, transparent);
+}
+
+.favorite-toggle {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  color: var(--muted);
+  background: var(--surface-low);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.favorite-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+.favorite-toggle:hover,
+.favorite-toggle:focus-visible,
+.favorite-toggle.is-favorite {
+  color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 10%, var(--surface));
+  border-color: color-mix(in srgb, var(--primary) 32%, var(--line));
+}
+
+.favorite-toggle.is-favorite svg {
+  fill: currentColor;
 }
 
 .currency-row__flag {
@@ -579,7 +646,8 @@ input.is-updating {
 
 .icon-button:hover,
 .currency-button:hover,
-.currency-row:hover {
+.currency-row:hover,
+.favorite-toggle:hover {
   border-color: color-mix(in srgb, var(--primary) 34%, var(--line));
 }
 

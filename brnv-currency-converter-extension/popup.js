@@ -125,6 +125,7 @@ const state = {
   conversionCount: 0,
   ratingPromptNextAt: RATING_PROMPT_AFTER,
   ratingPromptDismissed: false,
+  favoriteCurrencies: [],
   hasCountedCurrentInput: false,
   hasUserInteracted: false,
   lastRatingCountAt: 0
@@ -161,6 +162,26 @@ const els = {
 
 function getCurrency(code) {
   return currencies.find((currency) => currency.code === code) || currencies[0];
+}
+
+function isKnownCurrency(code) {
+  return currencies.some((currency) => currency.code === code);
+}
+
+function isFavoriteCurrency(code) {
+  return state.favoriteCurrencies.includes(code);
+}
+
+function getFavoriteButtonLabel(code) {
+  return `${isFavoriteCurrency(code) ? "Remove from favorites" : "Add to favorites"} ${code}`;
+}
+
+function toggleFavoriteCurrency(code) {
+  state.favoriteCurrencies = isFavoriteCurrency(code)
+    ? state.favoriteCurrencies.filter((favoriteCode) => favoriteCode !== code)
+    : [...state.favoriteCurrencies, code];
+  saveState();
+  renderCurrencyList();
 }
 
 function normalizeSearchText(value) {
@@ -384,7 +405,8 @@ function saveState() {
       theme: state.theme,
       conversionCount: state.conversionCount,
       ratingPromptNextAt: state.ratingPromptNextAt,
-      ratingPromptDismissed: state.ratingPromptDismissed
+      ratingPromptDismissed: state.ratingPromptDismissed,
+      favoriteCurrencies: state.favoriteCurrencies
     }
   });
 }
@@ -401,6 +423,9 @@ async function restoreState() {
     state.conversionCount = Number.isFinite(saved.conversionCount) ? saved.conversionCount : state.conversionCount;
     state.ratingPromptNextAt = Number.isFinite(saved.ratingPromptNextAt) ? saved.ratingPromptNextAt : state.ratingPromptNextAt;
     state.ratingPromptDismissed = Boolean(saved.ratingPromptDismissed);
+    state.favoriteCurrencies = Array.isArray(saved.favoriteCurrencies)
+      ? saved.favoriteCurrencies.filter(isKnownCurrency)
+      : state.favoriteCurrencies;
   }
 
   const activeAmount = state.lastAmount || "1";
@@ -411,6 +436,40 @@ async function restoreState() {
   }
 
   state.isRestoring = false;
+}
+
+function createCurrencyRow(currency, currentCode) {
+  const row = document.createElement("div");
+  const isSelected = currency.code === currentCode;
+  const isFavorite = isFavoriteCurrency(currency.code);
+  row.className = "currency-row";
+  row.setAttribute("role", "option");
+  row.setAttribute("aria-selected", isSelected ? "true" : "false");
+  row.classList.toggle("is-selected", isSelected);
+  row.innerHTML = `
+    <button class="currency-row__select pressable" type="button" data-select-code="${currency.code}">
+      <span class="currency-row__flag" aria-hidden="true">${currency.flag}</span>
+      <span class="currency-row__code">${currency.code}</span>
+      <span class="currency-row__name">${currency.name}</span>
+    </button>
+    <button class="favorite-toggle ${isFavorite ? "is-favorite" : ""}" type="button" data-favorite-code="${currency.code}" aria-label="${getFavoriteButtonLabel(currency.code)}" aria-pressed="${isFavorite}">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m12 3.8 2.45 4.96 5.47.8-3.96 3.86.94 5.45L12 16.29l-4.9 2.58.94-5.45-3.96-3.86 5.47-.8L12 3.8Z"></path>
+      </svg>
+    </button>
+  `;
+  return row;
+}
+
+function appendCurrencySection(title, sectionCurrencies, currentCode) {
+  if (!sectionCurrencies.length) return;
+  const section = document.createElement("section");
+  section.className = "currency-section";
+  section.innerHTML = `<h3 class="currency-section-title">${title}</h3>`;
+  sectionCurrencies.forEach((currency) => {
+    section.append(createCurrencyRow(currency, currentCode));
+  });
+  els.currencyList.append(section);
 }
 
 function renderCurrencyList() {
@@ -431,21 +490,15 @@ function renderCurrencyList() {
     return;
   }
 
-  filteredCurrencies.forEach((currency) => {
-    const row = document.createElement("button");
-    row.type = "button";
-    row.className = "currency-row pressable";
-    row.setAttribute("role", "option");
-    row.setAttribute("aria-selected", currency.code === currentCode ? "true" : "false");
-    row.dataset.code = currency.code;
-    row.classList.toggle("is-selected", currency.code === currentCode);
-    row.innerHTML = `
-      <span class="currency-row__flag" aria-hidden="true">${currency.flag}</span>
-      <span class="currency-row__code">${currency.code}</span>
-      <span class="currency-row__name">${currency.name}</span>
-    `;
-    els.currencyList.append(row);
-  });
+  if (query) {
+    appendCurrencySection("Search results", filteredCurrencies, currentCode);
+    return;
+  }
+
+  const favoriteCurrencies = state.favoriteCurrencies.map(getCurrency).filter((currency) => currency.code);
+  const otherCurrencies = currencies.filter((currency) => !isFavoriteCurrency(currency.code));
+  appendCurrencySection("Favorite currencies", favoriteCurrencies, currentCode);
+  appendCurrencySection("All currencies", otherCurrencies, currentCode);
 }
 
 function openCurrencyModal(side) {
@@ -565,9 +618,15 @@ function bindEvents() {
   els.currencySearch.addEventListener("input", renderCurrencyList);
 
   els.currencyList.addEventListener("click", (event) => {
-    const row = event.target.closest(".currency-row");
-    if (row?.dataset.code) {
-      selectCurrency(row.dataset.code);
+    const favoriteButton = event.target.closest("[data-favorite-code]");
+    if (favoriteButton) {
+      toggleFavoriteCurrency(favoriteButton.dataset.favoriteCode);
+      return;
+    }
+
+    const selectButton = event.target.closest("[data-select-code]");
+    if (selectButton) {
+      selectCurrency(selectButton.dataset.selectCode);
     }
   });
 
