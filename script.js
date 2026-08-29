@@ -784,14 +784,18 @@ function renderCurrencyList() {
     return getSearchText(currency).includes(query);
   });
   const favorites = state.favoriteCurrencies.map(getCurrency).filter((currency) => currency.code);
-  const popular = popularCurrencyCodes.map(getCurrency).filter((currency) => currency.code);
+  const popular = popularCurrencyCodes
+    .filter((code) => !isFavoriteCurrency(code))
+    .map(getCurrency)
+    .filter((currency) => currency.code);
+  const allCurrencies = currencies.filter((currency) => !isFavoriteCurrency(currency.code));
 
   const sections = query
     ? [{ title: t("searchResults"), items: filtered }]
     : [
         ...(favorites.length ? [{ title: t("favoriteCurrencies"), items: favorites }] : []),
         { title: t("popularCurrencies"), items: popular },
-        { title: t("allCurrencies"), items: currencies }
+        { title: t("allCurrencies"), items: allCurrencies }
       ];
 
   els.currencyList.innerHTML = "";
@@ -827,7 +831,11 @@ function renderCurrencyList() {
         </button>
       `;
       const favoriteToggle = option.querySelector(".favorite-toggle");
+      const stopFavoriteSelection = (event) => event.stopPropagation();
+      favoriteToggle.addEventListener("pointerdown", stopFavoriteSelection);
+      favoriteToggle.addEventListener("mousedown", stopFavoriteSelection);
       favoriteToggle.addEventListener("click", (event) => {
+        event.preventDefault();
         event.stopPropagation();
         toggleFavoriteCurrency(currency.code);
       });
