@@ -47,7 +47,7 @@ const translations = {
     removeFavoriteCurrency: "Remove from favorites",
     addCurrencyRow: "+ Add another currency",
     removeCurrencyRow: "Remove currency",
-    extraCurrencyLabel: "Also",
+    extraCurrencyLabel: "To",
     noCurrenciesFound: "No currencies found.",
     seoEyebrow: "Currency exchange made simple",
     seoTitle: "Fast online currency and crypto converter",
@@ -184,7 +184,7 @@ const translations = {
     removeFavoriteCurrency: "Прибрати з улюблених",
     addCurrencyRow: "+ Додати ще валюту",
     removeCurrencyRow: "Прибрати валюту",
-    extraCurrencyLabel: "Ще",
+    extraCurrencyLabel: "До",
     noCurrenciesFound: "Валют не знайдено.",
     seoEyebrow: "Обмін валют простими словами",
     seoTitle: "Швидкий онлайн-конвертер валют і криптовалют",
@@ -742,18 +742,28 @@ function renderExtraCurrencies() {
   state.extraCurrencies.forEach((code, index) => {
     const currency = getCurrency(code);
     const row = document.createElement("div");
-    row.className = "currency-row extra-currency-row";
+    row.className = "extra-currency-item";
     row.innerHTML = `
-      <label class="row-label" for="extraAmount${index}">${t("extraCurrencyLabel")}</label>
-      <span class="input-shell extra-input-shell">
-        <input id="extraAmount${index}" type="text" inputmode="decimal" readonly value="" aria-label="${getCurrencyName(code)} amount">
-        <button class="currency-button pressable" type="button" data-extra-select="${index}" aria-haspopup="dialog">
-          <span class="currency-flag">${currency.flag}</span>
-          <span class="currency-code">${currency.code}</span>
-          <span aria-hidden="true">⌄</span>
-        </button>
-        <button class="remove-currency-button pressable" type="button" data-extra-remove="${index}" aria-label="${t("removeCurrencyRow")} ${currency.code}">×</button>
-      </span>
+      <div class="extra-flow-icon" aria-hidden="true">
+        <svg class="swap-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" focusable="false" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7 4v14"></path>
+          <path d="M3.5 14.5 7 18l3.5-3.5"></path>
+          <path d="M17 20V6"></path>
+          <path d="M13.5 9.5 17 6l3.5 3.5"></path>
+        </svg>
+      </div>
+      <div class="currency-row extra-currency-row">
+        <label class="row-label" for="extraAmount${index}">${t("extraCurrencyLabel")}</label>
+        <span class="input-shell extra-input-shell">
+          <input id="extraAmount${index}" type="text" inputmode="decimal" readonly value="" aria-label="${getCurrencyName(code)} amount">
+          <button class="currency-button pressable" type="button" data-extra-select="${index}" aria-haspopup="dialog">
+            <span class="currency-flag">${currency.flag}</span>
+            <span class="currency-code">${currency.code}</span>
+            <span aria-hidden="true">⌄</span>
+          </button>
+          <button class="remove-currency-button pressable" type="button" data-extra-remove="${index}" aria-label="${t("removeCurrencyRow")} ${currency.code}">×</button>
+        </span>
+      </div>
     `;
     row.querySelector("[data-extra-select]").addEventListener("click", () => openCurrencyModal(`extra:${index}`));
     row.querySelector("[data-extra-remove]").addEventListener("click", () => removeExtraCurrency(index));
