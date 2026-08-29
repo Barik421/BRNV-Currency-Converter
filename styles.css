@@ -428,12 +428,20 @@ h1 {
 }
 
 .currency-caret {
-  display: inline-grid;
-  width: 0.9em;
-  height: 1em;
-  place-items: center;
-  line-height: 1;
-  transform: translateY(0.02em);
+  display: block;
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  color: currentColor;
+  overflow: visible;
+}
+
+.currency-caret path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.15;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .currency-flag {
@@ -522,7 +530,7 @@ h1 {
   height: 24px;
   color: #ffffff;
   pointer-events: none;
-  transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .swap-button.is-rotating .swap-icon {
@@ -537,7 +545,7 @@ h1 {
 .extra-currency-item {
   display: grid;
   gap: 10px;
-  animation: extraRowIn 220ms ease both;
+  animation: extraRowIn 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .extra-flow-icon {
@@ -610,7 +618,8 @@ h1 {
   font-weight: 850;
   letter-spacing: -0.01em;
   line-height: 1;
-  animation: addCurrencyButtonIn 220ms ease both;
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1), color 220ms ease, background 220ms ease, border-color 220ms ease;
+  animation: addCurrencyButtonIn 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .add-currency-button:hover,
@@ -628,7 +637,7 @@ h1 {
 @keyframes addCurrencyButtonIn {
   from {
     opacity: 0;
-    transform: translateY(-4px) scale(0.96);
+    transform: translateY(-8px) scale(0.98);
   }
   to {
     opacity: 1;

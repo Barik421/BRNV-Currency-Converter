@@ -746,10 +746,10 @@ function renderExtraCurrencies() {
     row.innerHTML = `
       <div class="extra-flow-icon" aria-hidden="true">
         <svg class="swap-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" focusable="false" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M7 4v14"></path>
-          <path d="M3.5 14.5 7 18l3.5-3.5"></path>
-          <path d="M17 20V6"></path>
-          <path d="M13.5 9.5 17 6l3.5 3.5"></path>
+          <path d="M8.5 4.75v13"></path>
+          <path d="M5.25 14.5 8.5 17.75l3.25-3.25"></path>
+          <path d="M15.5 19.25v-13"></path>
+          <path d="M12.25 9.5 15.5 6.25l3.25 3.25"></path>
         </svg>
       </div>
       <div class="currency-row extra-currency-row">
@@ -759,7 +759,7 @@ function renderExtraCurrencies() {
           <button class="currency-button pressable" type="button" data-extra-select="${index}" aria-haspopup="dialog">
             <span class="currency-flag">${currency.flag}</span>
             <span class="currency-code">${currency.code}</span>
-            <span class="currency-caret" aria-hidden="true">⌄</span>
+            <svg class="currency-caret" aria-hidden="true" viewBox="0 0 16 16" focusable="false"><path d="M4.25 6.25 8 10l3.75-3.75"/></svg>
           </button>
           <button class="remove-currency-button pressable" type="button" data-extra-remove="${index}" aria-label="${t("removeCurrencyRow")} ${currency.code}">×</button>
         </span>
