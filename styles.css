@@ -520,6 +520,73 @@ h1 {
   transform: rotate(180deg);
 }
 
+.extra-currency-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 2px;
+}
+
+.extra-currency-row {
+  animation: extraRowIn 220ms ease both;
+}
+
+.extra-input-shell input[readonly] {
+  cursor: default;
+}
+
+.remove-currency-button {
+  display: grid;
+  flex: 0 0 46px;
+  place-items: center;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  border-left: 1px solid var(--line);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.remove-currency-button:hover,
+.remove-currency-button:focus-visible {
+  color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 8%, transparent);
+}
+
+.add-currency-button {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+  padding: 0 18px;
+  color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 8%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--primary) 38%, transparent);
+  border-radius: 999px;
+  font-weight: 850;
+}
+
+.add-currency-button:hover,
+.add-currency-button:focus-visible {
+  background: color-mix(in srgb, var(--primary) 13%, transparent);
+  border-color: color-mix(in srgb, var(--primary) 54%, transparent);
+}
+
+.add-currency-button[hidden] {
+  display: none;
+}
+
+@keyframes extraRowIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .rate-panel {
   margin-top: 24px;
   padding-top: 22px;
@@ -1154,6 +1221,10 @@ h1 {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .extra-currency-row {
+    animation: none;
+  }
+
   *,
   *::before,
   *::after {

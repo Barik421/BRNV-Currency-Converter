@@ -4,7 +4,8 @@ const STORAGE_KEYS = {
   from: "brnvConverterFromCurrency",
   to: "brnvConverterToCurrency",
   theme: "brnvConverterTheme",
-  favorites: "brnvConverterFavoriteCurrencies"
+  favorites: "brnvConverterFavoriteCurrencies",
+  extraCurrencies: "brnvConverterExtraCurrencies"
 };
 
 const translations = {
@@ -44,6 +45,9 @@ const translations = {
     allCurrencies: "All currencies",
     addFavoriteCurrency: "Add to favorites",
     removeFavoriteCurrency: "Remove from favorites",
+    addCurrencyRow: "+ Add another currency",
+    removeCurrencyRow: "Remove currency",
+    extraCurrencyLabel: "Also",
     noCurrenciesFound: "No currencies found.",
     seoEyebrow: "Currency exchange made simple",
     seoTitle: "Fast online currency and crypto converter",
@@ -178,6 +182,9 @@ const translations = {
     allCurrencies: "Усі валюти",
     addFavoriteCurrency: "Додати в улюблені",
     removeFavoriteCurrency: "Прибрати з улюблених",
+    addCurrencyRow: "+ Додати ще валюту",
+    removeCurrencyRow: "Прибрати валюту",
+    extraCurrencyLabel: "Ще",
     noCurrenciesFound: "Валют не знайдено.",
     seoEyebrow: "Обмін валют простими словами",
     seoTitle: "Швидкий онлайн-конвертер валют і криптовалют",
@@ -403,6 +410,7 @@ const state = {
   fromCurrency: localStorage.getItem(STORAGE_KEYS.from) || "EUR",
   toCurrency: localStorage.getItem(STORAGE_KEYS.to) || "USD",
   favoriteCurrencies: loadFavoriteCurrencies(),
+  extraCurrencies: loadExtraCurrencies(),
   language: "en",
   activeInput: "from",
   selectingSide: "from",
@@ -431,6 +439,8 @@ const els = {
   toButton: document.getElementById("toCurrencyButton"),
   fromFlag: document.getElementById("fromFlag"),
   toFlag: document.getElementById("toFlag"),
+  extraCurrencyList: document.getElementById("extraCurrencyList"),
+  addCurrencyButton: document.getElementById("addCurrencyButton"),
   fromCode: document.getElementById("fromCode"),
   toCode: document.getElementById("toCode"),
   forwardRate: document.getElementById("forwardRate"),
@@ -463,6 +473,33 @@ function loadFavoriteCurrencies() {
 
 function saveFavoriteCurrencies() {
   localStorage.setItem(STORAGE_KEYS.favorites, JSON.stringify(state.favoriteCurrencies));
+}
+
+function loadExtraCurrencies() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEYS.extraCurrencies) || "[]");
+    if (!Array.isArray(saved)) return [];
+    return saved.filter((code, index) => currencies.some((currency) => currency.code === code) && saved.indexOf(code) === index).slice(0, 2);
+  } catch (error) {
+    return [];
+  }
+}
+
+function saveExtraCurrencies() {
+  localStorage.setItem(STORAGE_KEYS.extraCurrencies, JSON.stringify(state.extraCurrencies));
+}
+
+function getAvailableExtraCurrency() {
+  const usedCodes = new Set([state.fromCurrency, state.toCurrency, ...state.extraCurrencies]);
+  const preferredCodes = ["UAH", "HUF", "PLN", "GBP", "CHF", "BTC", "USDT", "CAD", "AUD"];
+  const preferred = preferredCodes.find((code) => !usedCodes.has(code) && currencies.some((currency) => currency.code === code));
+  return preferred || currencies.find((currency) => !usedCodes.has(currency.code))?.code || "USD";
+}
+
+function getConversionBase() {
+  const code = state.activeInput === "to" ? state.toCurrency : state.fromCurrency;
+  const input = state.activeInput === "to" ? els.toAmount : els.fromAmount;
+  return { code, amount: parseInputValue(input) };
 }
 
 function isFavoriteCurrency(code) {
@@ -520,6 +557,7 @@ function applyLanguage(language, shouldSave = false) {
 
   applyTheme(els.html.dataset.theme || "light");
   renderPopularConversions();
+  renderExtraCurrencies();
   renderCurrencyList();
 
   if (state.isReady) {
@@ -699,6 +737,42 @@ function animateValue(input) {
   input.classList.add("value-pop");
 }
 
+function renderExtraCurrencies() {
+  els.extraCurrencyList.innerHTML = "";
+  state.extraCurrencies.forEach((code, index) => {
+    const currency = getCurrency(code);
+    const row = document.createElement("div");
+    row.className = "currency-row extra-currency-row";
+    row.innerHTML = `
+      <label class="row-label" for="extraAmount${index}">${t("extraCurrencyLabel")}</label>
+      <span class="input-shell extra-input-shell">
+        <input id="extraAmount${index}" type="text" inputmode="decimal" readonly value="" aria-label="${getCurrencyName(code)} amount">
+        <button class="currency-button pressable" type="button" data-extra-select="${index}" aria-haspopup="dialog">
+          <span class="currency-flag">${currency.flag}</span>
+          <span class="currency-code">${currency.code}</span>
+          <span aria-hidden="true">⌄</span>
+        </button>
+        <button class="remove-currency-button pressable" type="button" data-extra-remove="${index}" aria-label="${t("removeCurrencyRow")} ${currency.code}">×</button>
+      </span>
+    `;
+    row.querySelector("[data-extra-select]").addEventListener("click", () => openCurrencyModal(`extra:${index}`));
+    row.querySelector("[data-extra-remove]").addEventListener("click", () => removeExtraCurrency(index));
+    els.extraCurrencyList.appendChild(row);
+  });
+  els.addCurrencyButton.hidden = state.extraCurrencies.length >= 2;
+}
+
+async function updateExtraConversions(baseCode, baseAmount) {
+  const rows = [...els.extraCurrencyList.querySelectorAll(".extra-currency-row")];
+  await Promise.all(state.extraCurrencies.map(async (code, index) => {
+    const input = rows[index]?.querySelector("input");
+    if (!input) return;
+    const rate = await getRate(baseCode, code);
+    input.value = baseAmount && Number.isFinite(rate) ? formatAmount(baseAmount * rate) : "";
+    animateValue(input);
+  }));
+}
+
 async function updateConversion(source = state.activeInput, shouldTrack = false) {
   const requestToken = ++state.requestToken;
   updateCurrencyButtons();
@@ -718,6 +792,9 @@ async function updateConversion(source = state.activeInput, shouldTrack = false)
       els.fromAmount.value = converted ? formatAmount(converted) : "";
       animateValue(els.fromAmount);
     }
+
+    const base = getConversionBase();
+    await updateExtraConversions(base.code, base.amount);
 
     els.forwardRate.textContent = `1 ${state.fromCurrency} = ${formatRate(forward)} ${state.toCurrency}`;
     els.reverseRate.textContent = `1 ${state.toCurrency} = ${formatRate(reverse)} ${state.fromCurrency}`;
@@ -880,13 +957,36 @@ function selectCurrency(code) {
     state.fromCurrency = code;
     localStorage.setItem(STORAGE_KEYS.from, code);
     state.activeInput = "from";
-  } else {
+  } else if (state.selectingSide === "to") {
     state.toCurrency = code;
     localStorage.setItem(STORAGE_KEYS.to, code);
     state.activeInput = "to";
+  } else if (state.selectingSide.startsWith("extra:")) {
+    const index = Number.parseInt(state.selectingSide.split(":")[1], 10);
+    if (Number.isInteger(index) && state.extraCurrencies[index]) {
+      state.extraCurrencies[index] = code;
+      state.extraCurrencies = state.extraCurrencies.filter((currencyCode, currencyIndex, list) => list.indexOf(currencyCode) === currencyIndex).slice(0, 2);
+      saveExtraCurrencies();
+      renderExtraCurrencies();
+    }
   }
 
   closeCurrencyModal();
+  updateConversion(state.activeInput, true);
+}
+
+function addExtraCurrency() {
+  if (state.extraCurrencies.length >= 2) return;
+  state.extraCurrencies.push(getAvailableExtraCurrency());
+  saveExtraCurrencies();
+  renderExtraCurrencies();
+  updateConversion(state.activeInput, true);
+}
+
+function removeExtraCurrency(index) {
+  state.extraCurrencies.splice(index, 1);
+  saveExtraCurrencies();
+  renderExtraCurrencies();
   updateConversion(state.activeInput, true);
 }
 
@@ -943,6 +1043,7 @@ function bindEvents() {
 
   els.fromButton.addEventListener("click", () => openCurrencyModal("from"));
   els.toButton.addEventListener("click", () => openCurrencyModal("to"));
+  els.addCurrencyButton.addEventListener("click", addExtraCurrency);
   els.swapButton.addEventListener("click", swapCurrencies);
   els.currencySearch.addEventListener("input", renderCurrencyList);
 
