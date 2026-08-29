@@ -435,7 +435,8 @@ function t(key) {
 }
 
 function getCurrencyName(code) {
-  return translations[state.language].currencyNames[code] || translations.en.currencyNames[code] || code;
+  const currency = getCurrency(code);
+  return translations[state.language].currencyNames[code] || translations.en.currencyNames[code] || currency.name || code;
 }
 
 function trackEvent(name, params = {}) {
