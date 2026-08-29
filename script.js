@@ -3,7 +3,8 @@ const CRYPTO_API = "https://api.coingecko.com/api/v3/simple/price";
 const STORAGE_KEYS = {
   from: "brnvConverterFromCurrency",
   to: "brnvConverterToCurrency",
-  theme: "brnvConverterTheme"
+  theme: "brnvConverterTheme",
+  favorites: "brnvConverterFavoriteCurrencies"
 };
 
 const translations = {
@@ -38,8 +39,11 @@ const translations = {
     closeCurrencySelector: "Close currency selector",
     searchPlaceholder: "Search currency...",
     searchResults: "Search results",
+    favoriteCurrencies: "Favorite currencies",
     popularCurrencies: "Popular currencies",
     allCurrencies: "All currencies",
+    addFavoriteCurrency: "Add to favorites",
+    removeFavoriteCurrency: "Remove from favorites",
     noCurrenciesFound: "No currencies found.",
     seoEyebrow: "Currency exchange made simple",
     seoTitle: "Fast online currency and crypto converter",
@@ -169,8 +173,11 @@ const translations = {
     closeCurrencySelector: "Закрити вибір валюти",
     searchPlaceholder: "Пошук валюти...",
     searchResults: "Результати пошуку",
+    favoriteCurrencies: "Улюблені валюти",
     popularCurrencies: "Популярні валюти",
     allCurrencies: "Усі валюти",
+    addFavoriteCurrency: "Додати в улюблені",
+    removeFavoriteCurrency: "Прибрати з улюблених",
     noCurrenciesFound: "Валют не знайдено.",
     seoEyebrow: "Обмін валют простими словами",
     seoTitle: "Швидкий онлайн-конвертер валют і криптовалют",
@@ -374,6 +381,10 @@ const currencies = [
   { code: "SUI", name: "Sui", flag: "S", aliases: "sui суї суи" }
 ];
 
+const popularCurrencyCodes = [
+  "USD", "EUR", "GBP", "UAH", "PLN", "HUF", "CAD", "AUD", "CHF", "JPY", "CNY", "HKD", "SGD", "NZD", "SEK", "NOK", "DKK", "CZK", "TRY", "AED", "BTC", "ETH", "USDT", "USDC"
+];
+
 const popularConversions = [
   ["EUR", "USD"],
   ["USD", "EUR"],
@@ -391,6 +402,7 @@ const popularConversions = [
 const state = {
   fromCurrency: localStorage.getItem(STORAGE_KEYS.from) || "EUR",
   toCurrency: localStorage.getItem(STORAGE_KEYS.to) || "USD",
+  favoriteCurrencies: loadFavoriteCurrencies(),
   language: "en",
   activeInput: "from",
   selectingSide: "from",
@@ -437,6 +449,36 @@ function t(key) {
 function getCurrencyName(code) {
   const currency = getCurrency(code);
   return translations[state.language].currencyNames[code] || translations.en.currencyNames[code] || currency.name || code;
+}
+
+function loadFavoriteCurrencies() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEYS.favorites) || "[]");
+    if (!Array.isArray(saved)) return [];
+    return saved.filter((code, index) => currencies.some((currency) => currency.code === code) && saved.indexOf(code) === index);
+  } catch (error) {
+    return [];
+  }
+}
+
+function saveFavoriteCurrencies() {
+  localStorage.setItem(STORAGE_KEYS.favorites, JSON.stringify(state.favoriteCurrencies));
+}
+
+function isFavoriteCurrency(code) {
+  return state.favoriteCurrencies.includes(code);
+}
+
+function toggleFavoriteCurrency(code) {
+  state.favoriteCurrencies = isFavoriteCurrency(code)
+    ? state.favoriteCurrencies.filter((favoriteCode) => favoriteCode !== code)
+    : [...state.favoriteCurrencies, code];
+  saveFavoriteCurrencies();
+  renderCurrencyList();
+}
+
+function getFavoriteButtonLabel(code) {
+  return `${isFavoriteCurrency(code) ? t("removeFavoriteCurrency") : t("addFavoriteCurrency")} ${code}`;
 }
 
 function trackEvent(name, params = {}) {
@@ -741,11 +783,14 @@ function renderCurrencyList() {
   const filtered = currencies.filter((currency) => {
     return getSearchText(currency).includes(query);
   });
+  const favorites = state.favoriteCurrencies.map(getCurrency).filter((currency) => currency.code);
+  const popular = popularCurrencyCodes.map(getCurrency).filter((currency) => currency.code);
 
   const sections = query
     ? [{ title: t("searchResults"), items: filtered }]
     : [
-        { title: t("popularCurrencies"), items: currencies },
+        ...(favorites.length ? [{ title: t("favoriteCurrencies"), items: favorites }] : []),
+        { title: t("popularCurrencies"), items: popular },
         { title: t("allCurrencies"), items: currencies }
       ];
 
@@ -759,24 +804,47 @@ function renderCurrencyList() {
 
     if (!section.items.length) {
       const empty = document.createElement("p");
-      empty.className = "currency-option__name";
+      empty.className = "currency-option__name currency-option__empty";
       empty.textContent = t("noCurrenciesFound");
       els.currencyList.appendChild(empty);
       return;
     }
 
     section.items.forEach((currency) => {
-      const option = document.createElement("button");
+      const option = document.createElement("div");
+      const isFavorite = isFavoriteCurrency(currency.code);
       option.className = "currency-option pressable";
-      option.type = "button";
+      option.setAttribute("role", "button");
+      option.tabIndex = 0;
       option.innerHTML = `
         <span class="currency-option__flag">${currency.flag}</span>
         <span class="currency-option__meta">
           <span class="currency-option__code">${currency.code}</span>
           <span class="currency-option__name">${getCurrencyName(currency.code)}</span>
         </span>
+        <button class="favorite-toggle ${isFavorite ? "is-favorite" : ""}" type="button" aria-label="${getFavoriteButtonLabel(currency.code)}" aria-pressed="${isFavorite}">
+          <span aria-hidden="true">${isFavorite ? "★" : "☆"}</span>
+        </button>
       `;
+      const favoriteToggle = option.querySelector(".favorite-toggle");
+      favoriteToggle.addEventListener("click", (event) => {
+        event.stopPropagation();
+        toggleFavoriteCurrency(currency.code);
+      });
+      favoriteToggle.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          event.stopPropagation();
+          toggleFavoriteCurrency(currency.code);
+        }
+      });
       option.addEventListener("click", () => selectCurrency(currency.code));
+      option.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          selectCurrency(currency.code);
+        }
+      });
       els.currencyList.appendChild(option);
     });
   });
