@@ -532,21 +532,21 @@ h1 {
 
 .extra-currency-list {
   display: grid;
-  gap: 6px;
+  gap: 0;
 }
 
 .extra-currency-item {
   display: grid;
-  gap: 4px;
+  gap: 0;
   animation: extraRowIn 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .extra-flow-icon {
   display: grid;
   position: relative;
-  width: 42px;
-  height: 42px;
-  margin: 0 auto;
+  width: 40px;
+  height: 40px;
+  margin: -2px auto -1px;
   place-items: center;
   justify-self: center;
   color: #ffffff;

@@ -184,7 +184,7 @@ const translations = {
     removeFavoriteCurrency: "Прибрати з улюблених",
     addCurrencyRow: "Додати валюту",
     removeCurrencyRow: "Прибрати валюту",
-    extraCurrencyLabel: "До",
+    extraCurrencyLabel: "В",
     noCurrenciesFound: "Валют не знайдено.",
     seoEyebrow: "Обмін валют простими словами",
     seoTitle: "Швидкий онлайн-конвертер валют і криптовалют",
