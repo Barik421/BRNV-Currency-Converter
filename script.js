@@ -759,7 +759,7 @@ function renderExtraCurrencies() {
           <button class="currency-button pressable" type="button" data-extra-select="${index}" aria-haspopup="dialog">
             <span class="currency-flag">${currency.flag}</span>
             <span class="currency-code">${currency.code}</span>
-            <span aria-hidden="true">⌄</span>
+            <span class="currency-caret" aria-hidden="true">⌄</span>
           </button>
           <button class="remove-currency-button pressable" type="button" data-extra-remove="${index}" aria-label="${t("removeCurrencyRow")} ${currency.code}">×</button>
         </span>

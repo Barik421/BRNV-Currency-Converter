@@ -427,6 +427,15 @@ h1 {
   background: color-mix(in srgb, var(--primary) 8%, transparent);
 }
 
+.currency-caret {
+  display: inline-grid;
+  width: 0.9em;
+  height: 1em;
+  place-items: center;
+  line-height: 1;
+  transform: translateY(0.02em);
+}
+
 .currency-flag {
   display: inline-grid;
   width: 1.65em;
@@ -522,7 +531,7 @@ h1 {
 
 .extra-currency-list {
   display: grid;
-  gap: 12px;
+  gap: 14px;
 }
 
 .extra-currency-item {
@@ -533,9 +542,9 @@ h1 {
 
 .extra-flow-icon {
   display: grid;
-  width: 34px;
-  height: 34px;
-  margin: 2px auto 0;
+  width: 44px;
+  height: 44px;
+  margin: 4px auto 0;
   place-items: center;
   justify-self: center;
   color: #ffffff;
@@ -546,8 +555,8 @@ h1 {
 }
 
 .extra-flow-icon .swap-icon {
-  width: 18px;
-  height: 18px;
+  width: 24px;
+  height: 24px;
 }
 
 .extra-currency-row {
@@ -579,7 +588,7 @@ h1 {
 .add-currency-actions {
   display: flex;
   justify-content: flex-end;
-  margin-top: 12px;
+  margin-top: 20px;
 }
 
 .add-currency-actions:has(.add-currency-button[hidden]) {
@@ -588,19 +597,20 @@ h1 {
 
 .add-currency-button {
   display: inline-flex;
-  min-height: 38px;
+  min-height: 32px;
   align-items: center;
   justify-content: center;
-  padding: 0 16px;
+  padding: 0 12px;
   color: var(--primary);
   background: color-mix(in srgb, var(--primary) 9%, var(--surface));
   border: 1px solid color-mix(in srgb, var(--primary) 24%, transparent);
-  border-radius: 14px;
+  border-radius: 12px;
   box-shadow: none;
-  font-size: 0.82rem;
+  font-size: 0.74rem;
   font-weight: 850;
   letter-spacing: -0.01em;
   line-height: 1;
+  animation: addCurrencyButtonIn 220ms ease both;
 }
 
 .add-currency-button:hover,
@@ -608,10 +618,22 @@ h1 {
   color: #ffffff;
   background: linear-gradient(145deg, var(--primary), var(--primary-strong));
   border-color: transparent;
+  transform: translateY(-1px);
 }
 
 .add-currency-button[hidden] {
   display: none;
+}
+
+@keyframes addCurrencyButtonIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @keyframes extraRowIn {
@@ -1259,7 +1281,8 @@ h1 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .extra-currency-item {
+  .extra-currency-item,
+  .add-currency-button {
     animation: none;
   }
 
