@@ -959,8 +959,9 @@ h1 {
 .currency-list {
   display: grid;
   gap: 8px;
-  padding: 0 4px 8px;
+  padding: 0 20px 8px 4px;
   overflow-y: auto;
+  scrollbar-gutter: stable;
 }
 
 .list-heading {
@@ -976,6 +977,7 @@ h1 {
   display: flex;
   align-items: center;
   width: 100%;
+  box-sizing: border-box;
   gap: 14px;
   padding: 14px;
   color: var(--text);
@@ -1026,6 +1028,7 @@ h1 {
 .favorite-toggle {
   display: grid;
   flex: 0 0 auto;
+  margin-right: 6px;
   width: 36px;
   height: 36px;
   place-items: center;
