@@ -22,12 +22,11 @@ Open `index.html` locally or publish the repository with GitHub Pages.
 
 ## Configuration
 
-Replace these placeholders before production:
+Production settings live in the static HTML and JavaScript files:
 
-- `G-BPPLNFQSNS` with a different GA4 Measurement ID if you change analytics properties
-- `ca-pub-3597944314037621` with a different AdSense publisher ID if you change accounts
-- `data-ad-slot="5002789120"` with a different AdSense slot ID if you change ad units
-- `https://brnvconverter.com/` with your custom domain in canonical URLs, Open Graph URLs, JSON-LD, `robots.txt`, and `sitemap.xml`
+- GA4 is configured in the page `<head>` with Google Consent Mode enabled.
+- AdSense is loaded only after visitor consent through `consent.js`.
+- Domain-specific SEO settings are configured in canonical URLs, Open Graph URLs, JSON-LD, `robots.txt`, and `sitemap.xml`.
 
 ## Contact
 
