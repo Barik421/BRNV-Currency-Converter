@@ -168,7 +168,7 @@
           <div class="currency-row" id="fromRow">
             <label class="row-label" for="fromAmount" data-i18n="fromLabel">From</label>
             <span class="input-shell">
-              <input id="fromAmount" type="number" inputmode="decimal" min="0" step="any" placeholder="0.00" autocomplete="off">
+              <input id="fromAmount" type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" placeholder="0.00" autocomplete="off">
               <button class="currency-button pressable" id="fromCurrencyButton" type="button" aria-haspopup="dialog">
                 <span class="currency-flag" id="fromFlag">🇪🇺</span>
                 <span class="currency-code" id="fromCode">EUR</span>
@@ -191,7 +191,7 @@
           <div class="currency-row" id="toRow">
             <label class="row-label" for="toAmount" data-i18n="toLabel">To</label>
             <span class="input-shell">
-              <input id="toAmount" type="number" inputmode="decimal" min="0" step="any" placeholder="0.00" autocomplete="off">
+              <input id="toAmount" type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" placeholder="0.00" autocomplete="off">
               <button class="currency-button pressable" id="toCurrencyButton" type="button" aria-haspopup="dialog">
                 <span class="currency-flag" id="toFlag">🇺🇸</span>
                 <span class="currency-code" id="toCode">USD</span>
@@ -306,6 +306,6 @@
   </div>
 
   <script src="consent.js?v=20260501"></script>
-  <script src="script.js?v=20260830-copy-seo"></script>
+  <script src="script.js?v=20260904-comma-input"></script>
 </body>
 </html>

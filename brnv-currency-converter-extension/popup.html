@@ -28,7 +28,7 @@
         <label class="amount-field" for="fromAmount">
           <span class="field-label">From</span>
           <span class="field-control">
-            <input id="fromAmount" type="number" inputmode="decimal" min="0" step="any" placeholder="0.00" autocomplete="off">
+            <input id="fromAmount" type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" placeholder="0.00" autocomplete="off">
             <button class="currency-button pressable" id="fromCurrencyButton" type="button" aria-haspopup="dialog">
               <span class="currency-flag" id="fromFlag" aria-hidden="true">🇪🇺</span>
               <span class="currency-code" id="fromCode">EUR</span>
@@ -51,7 +51,7 @@
         <label class="amount-field" for="toAmount">
           <span class="field-label">To</span>
           <span class="field-control">
-            <input id="toAmount" type="number" inputmode="decimal" min="0" step="any" placeholder="0.00" autocomplete="off">
+            <input id="toAmount" type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" placeholder="0.00" autocomplete="off">
             <button class="currency-button pressable" id="toCurrencyButton" type="button" aria-haspopup="dialog">
               <span class="currency-flag" id="toFlag" aria-hidden="true">🇺🇸</span>
               <span class="currency-code" id="toCode">USD</span>

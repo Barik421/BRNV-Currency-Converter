@@ -221,6 +221,12 @@ function formatInputValue(value) {
   return Number.parseFloat(value.toFixed(getPrecision(value))).toString();
 }
 
+function parseInputValue(input) {
+  const normalized = input.value.replace(",", ".");
+  const value = Number.parseFloat(normalized);
+  return Number.isFinite(value) ? value : null;
+}
+
 function setStatus(message, type = "success") {
   els.statusLine.textContent = message;
   els.statusLine.classList.toggle("is-loading", type === "loading");
@@ -317,13 +323,13 @@ function convertFromActiveInput() {
   }
 
   if (state.activeInput === "from") {
-    const amount = Number.parseFloat(els.fromAmount.value);
-    els.toAmount.value = Number.isFinite(amount) ? formatInputValue(amount * rate) : "";
+    const amount = parseInputValue(els.fromAmount);
+    els.toAmount.value = amount !== null ? formatInputValue(amount * rate) : "";
     animateValue(els.toAmount);
     state.lastAmount = els.fromAmount.value;
   } else {
-    const amount = Number.parseFloat(els.toAmount.value);
-    els.fromAmount.value = Number.isFinite(amount) ? formatInputValue(amount / rate) : "";
+    const amount = parseInputValue(els.toAmount);
+    els.fromAmount.value = amount !== null ? formatInputValue(amount / rate) : "";
     animateValue(els.fromAmount);
     state.lastAmount = els.toAmount.value;
   }
