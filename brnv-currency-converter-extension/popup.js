@@ -213,12 +213,17 @@ function formatNumber(value) {
   }).format(value);
 }
 
-function formatInputValue(value) {
+function formatInputValue(value, decimalSeparator = ".") {
   if (!Number.isFinite(value)) {
     return "";
   }
 
-  return Number.parseFloat(value.toFixed(getPrecision(value))).toString();
+  const formatted = Number.parseFloat(value.toFixed(getPrecision(value))).toString();
+  return decimalSeparator === "," ? formatted.replace(".", ",") : formatted;
+}
+
+function getDecimalSeparator(input) {
+  return input.value.includes(",") ? "," : ".";
 }
 
 function parseInputValue(input) {
@@ -324,12 +329,14 @@ function convertFromActiveInput() {
 
   if (state.activeInput === "from") {
     const amount = parseInputValue(els.fromAmount);
-    els.toAmount.value = amount !== null ? formatInputValue(amount * rate) : "";
+    const decimalSeparator = getDecimalSeparator(els.fromAmount);
+    els.toAmount.value = amount !== null ? formatInputValue(amount * rate, decimalSeparator) : "";
     animateValue(els.toAmount);
     state.lastAmount = els.fromAmount.value;
   } else {
     const amount = parseInputValue(els.toAmount);
-    els.fromAmount.value = amount !== null ? formatInputValue(amount / rate) : "";
+    const decimalSeparator = getDecimalSeparator(els.toAmount);
+    els.fromAmount.value = amount !== null ? formatInputValue(amount / rate, decimalSeparator) : "";
     animateValue(els.fromAmount);
     state.lastAmount = els.toAmount.value;
   }

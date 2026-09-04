@@ -579,12 +579,17 @@ function getPrecision(value) {
   return 10;
 }
 
-function formatAmount(value) {
+function formatAmount(value, decimalSeparator = ".") {
   if (!Number.isFinite(value)) return "";
-  return new Intl.NumberFormat("en-US", {
+  const formatted = new Intl.NumberFormat("en-US", {
     useGrouping: false,
     maximumFractionDigits: getPrecision(value)
   }).format(value);
+  return decimalSeparator === "," ? formatted.replace(".", ",") : formatted;
+}
+
+function getDecimalSeparator(input) {
+  return input.value.includes(",") ? "," : ".";
 }
 
 function formatRate(value) {
@@ -772,13 +777,13 @@ function renderExtraCurrencies() {
   els.addCurrencyButton.hidden = state.extraCurrencies.length >= 2;
 }
 
-async function updateExtraConversions(baseCode, baseAmount) {
+async function updateExtraConversions(baseCode, baseAmount, decimalSeparator = ".") {
   const rows = [...els.extraCurrencyList.querySelectorAll(".extra-currency-row")];
   await Promise.all(state.extraCurrencies.map(async (code, index) => {
     const input = rows[index]?.querySelector("input");
     if (!input) return;
     const rate = await getRate(baseCode, code);
-    input.value = baseAmount && Number.isFinite(rate) ? formatAmount(baseAmount * rate) : "";
+    input.value = baseAmount && Number.isFinite(rate) ? formatAmount(baseAmount * rate, decimalSeparator) : "";
     animateValue(input);
   }));
 }
@@ -793,18 +798,21 @@ async function updateConversion(source = state.activeInput, shouldTrack = false)
     const reverse = await getRate(state.toCurrency, state.fromCurrency);
     if (requestToken !== state.requestToken) return;
 
+    const sourceInput = source === "to" ? els.toAmount : els.fromAmount;
+    const decimalSeparator = getDecimalSeparator(sourceInput);
+
     if (source === "from") {
       const converted = parseInputValue(els.fromAmount) * forward;
-      els.toAmount.value = converted ? formatAmount(converted) : "";
+      els.toAmount.value = converted ? formatAmount(converted, decimalSeparator) : "";
       animateValue(els.toAmount);
     } else if (source === "to") {
       const converted = parseInputValue(els.toAmount) * reverse;
-      els.fromAmount.value = converted ? formatAmount(converted) : "";
+      els.fromAmount.value = converted ? formatAmount(converted, decimalSeparator) : "";
       animateValue(els.fromAmount);
     }
 
     const base = getConversionBase();
-    await updateExtraConversions(base.code, base.amount);
+    await updateExtraConversions(base.code, base.amount, base.decimalSeparator);
 
     els.forwardRate.textContent = `1 ${state.fromCurrency} = ${formatRate(forward)} ${state.toCurrency}`;
     els.reverseRate.textContent = `1 ${state.toCurrency} = ${formatRate(reverse)} ${state.fromCurrency}`;
