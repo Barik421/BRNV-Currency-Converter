@@ -499,7 +499,7 @@ function getAvailableExtraCurrency() {
 function getConversionBase() {
   const code = state.activeInput === "to" ? state.toCurrency : state.fromCurrency;
   const input = state.activeInput === "to" ? els.toAmount : els.fromAmount;
-  return { code, amount: parseInputValue(input) };
+  return { code, amount: parseInputValue(input), decimalSeparator: getDecimalSeparator(input) };
 }
 
 function isFavoriteCurrency(code) {
