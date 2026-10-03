@@ -267,6 +267,22 @@ input.is-updating {
   line-height: 1;
 }
 
+.currency-flag__image {
+  display: block;
+  width: 1.45em;
+  height: 1.05em;
+  object-fit: cover;
+  border-radius: 0.18em;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--line) 80%, transparent);
+}
+
+.currency-flag__symbol {
+  display: inline-grid;
+  min-width: 1.45em;
+  place-items: center;
+  line-height: 1;
+}
+
 .chevron {
   color: var(--muted);
   transform: translateY(-1px);

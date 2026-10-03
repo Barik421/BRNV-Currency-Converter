@@ -182,6 +182,28 @@ function getCurrency(code) {
   return currencies.find((currency) => currency.code === code) || currencies[0];
 }
 
+function getRegionalFlagCode(flag) {
+  const chars = Array.from(flag || "");
+  if (chars.length !== 2) return "";
+
+  const points = chars.map((char) => char.codePointAt(0));
+  if (points.some((point) => point < 0x1f1e6 || point > 0x1f1ff)) return "";
+
+  return points
+    .map((point) => String.fromCharCode(point - 0x1f1e6 + 65))
+    .join("")
+    .toLowerCase();
+}
+
+function getCurrencyMarkHtml(currency) {
+  const flagCode = getRegionalFlagCode(currency.flag);
+  if (!flagCode) {
+    return `<span class="currency-flag__symbol">${currency.flag}</span>`;
+  }
+
+  return `<img class="currency-flag__image" src="https://flagcdn.com/w40/${flagCode}.png" srcset="https://flagcdn.com/w80/${flagCode}.png 2x" alt="" loading="lazy" decoding="async">`;
+}
+
 function isKnownCurrency(code) {
   return currencies.some((currency) => currency.code === code);
 }
@@ -292,8 +314,8 @@ function updateCurrencyButtons() {
   const from = getCurrency(state.fromCurrency);
   const to = getCurrency(state.toCurrency);
 
-  els.fromFlag.textContent = from.flag;
-  els.toFlag.textContent = to.flag;
+  els.fromFlag.innerHTML = getCurrencyMarkHtml(from);
+  els.toFlag.innerHTML = getCurrencyMarkHtml(to);
   els.fromCode.textContent = from.code;
   els.toCode.textContent = to.code;
 }
@@ -479,7 +501,7 @@ function createCurrencyRow(currency, currentCode) {
   row.classList.toggle("is-selected", isSelected);
   row.innerHTML = `
     <button class="currency-row__select pressable" type="button" data-select-code="${currency.code}">
-      <span class="currency-row__flag" aria-hidden="true">${currency.flag}</span>
+      <span class="currency-row__flag" aria-hidden="true">${getCurrencyMarkHtml(currency)}</span>
       <span class="currency-row__code">${currency.code}</span>
       <span class="currency-row__name">${currency.name}</span>
     </button>

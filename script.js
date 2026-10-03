@@ -582,6 +582,28 @@ function getCurrency(code) {
   return currencies.find((currency) => currency.code === code) || currencies[0];
 }
 
+function getRegionalFlagCode(flag) {
+  const chars = Array.from(flag || "");
+  if (chars.length !== 2) return "";
+
+  const points = chars.map((char) => char.codePointAt(0));
+  if (points.some((point) => point < 0x1f1e6 || point > 0x1f1ff)) return "";
+
+  return points
+    .map((point) => String.fromCharCode(point - 0x1f1e6 + 65))
+    .join("")
+    .toLowerCase();
+}
+
+function getCurrencyMarkHtml(currency) {
+  const flagCode = getRegionalFlagCode(currency.flag);
+  if (!flagCode) {
+    return `<span class="currency-flag__symbol">${currency.flag}</span>`;
+  }
+
+  return `<img class="currency-flag__image" src="https://flagcdn.com/w40/${flagCode}.png" srcset="https://flagcdn.com/w80/${flagCode}.png 2x" alt="" loading="lazy" decoding="async">`;
+}
+
 function detectInitialLanguage() {
   return "en";
 }
@@ -784,8 +806,8 @@ function updateCurrencyButtons() {
   const from = getCurrency(state.fromCurrency);
   const to = getCurrency(state.toCurrency);
 
-  els.fromFlag.textContent = from.flag;
-  els.toFlag.textContent = to.flag;
+  els.fromFlag.innerHTML = getCurrencyMarkHtml(from);
+  els.toFlag.innerHTML = getCurrencyMarkHtml(to);
   els.fromCode.textContent = from.code;
   els.toCode.textContent = to.code;
 }
@@ -816,7 +838,7 @@ function renderExtraCurrencies() {
         <span class="input-shell extra-input-shell">
           <input id="extraAmount${index}" type="text" inputmode="decimal" readonly value="" aria-label="${getCurrencyName(code)} amount">
           <button class="currency-button pressable" type="button" data-extra-select="${index}" aria-haspopup="dialog">
-            <span class="currency-flag">${currency.flag}</span>
+            <span class="currency-flag">${getCurrencyMarkHtml(currency)}</span>
             <span class="currency-code">${currency.code}</span>
             <span class="currency-caret" aria-hidden="true"></span>
           </button>
@@ -897,8 +919,8 @@ async function renderPopularConversions() {
     const toCurrency = getCurrency(to);
     card.innerHTML = `
       <span class="popular-card__icons" aria-hidden="true">
-        <span>${fromCurrency.flag}</span>
-        <span>${toCurrency.flag}</span>
+        <span>${getCurrencyMarkHtml(fromCurrency)}</span>
+        <span>${getCurrencyMarkHtml(toCurrency)}</span>
       </span>
       <span class="popular-card__meta">
         <span class="popular-card__pair">${from} ${t("toWord")} ${to}</span>
@@ -970,7 +992,7 @@ function renderCurrencyList() {
       option.setAttribute("role", "button");
       option.tabIndex = 0;
       option.innerHTML = `
-        <span class="currency-option__flag">${currency.flag}</span>
+        <span class="currency-option__flag">${getCurrencyMarkHtml(currency)}</span>
         <span class="currency-option__meta">
           <span class="currency-option__code">${currency.code}</span>
           <span class="currency-option__name">${getCurrencyName(currency.code)}</span>
