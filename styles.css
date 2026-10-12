@@ -279,6 +279,40 @@ h1 {
   box-shadow: none;
 }
 
+[data-theme="dark"] .text-button {
+  color: #ffd8de !important;
+  background: linear-gradient(145deg, rgba(255, 75, 92, 0.22), rgba(255, 107, 120, 0.14));
+  border: 1px solid rgba(255, 107, 120, 0.34);
+  box-shadow: 0 12px 30px rgba(255, 75, 92, 0.08);
+}
+
+[data-theme="dark"] .text-button:hover,
+[data-theme="dark"] .text-button:focus-visible {
+  color: #ffffff !important;
+  background: linear-gradient(145deg, rgba(255, 75, 92, 0.32), rgba(255, 107, 120, 0.2));
+  border-color: rgba(255, 130, 142, 0.52);
+  box-shadow: 0 16px 36px rgba(255, 75, 92, 0.12);
+}
+
+[data-theme="dark"] .text-button--secondary {
+  color: var(--text) !important;
+  background: rgba(255, 255, 255, 0.055);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: none;
+}
+
+[data-theme="dark"] .text-button--secondary:hover,
+[data-theme="dark"] .text-button--secondary:focus-visible {
+  background: rgba(255, 255, 255, 0.085);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+[data-theme="dark"] .wallet-copy {
+  color: #ffc2c9 !important;
+  background: rgba(255, 75, 92, 0.16);
+  border-color: rgba(255, 107, 120, 0.32);
+}
+
 .converter-shell {
   position: relative;
   max-width: 540px;

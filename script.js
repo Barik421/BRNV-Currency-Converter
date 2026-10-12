@@ -699,8 +699,14 @@ function parseInputValue(input) {
   return Number.isFinite(value) ? value : 0;
 }
 
+function updateThemeColor(theme) {
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+  if (themeColor) themeColor.setAttribute("content", theme === "dark" ? "#121212" : "#e63946");
+}
+
 function applyTheme(theme, shouldSave = false) {
   els.html.dataset.theme = theme;
+  updateThemeColor(theme);
   els.themeIcon.textContent = theme === "dark" ? "☾" : "☀";
   els.themeToggle.setAttribute("aria-label", theme === "dark" ? t("themeToLight") : t("themeToDark"));
 

@@ -11,8 +11,14 @@ function getPreferredTheme() {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
+function updateThemeColor(theme) {
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+  if (themeColor) themeColor.setAttribute("content", theme === "dark" ? "#121212" : "#e63946");
+}
+
 function applyStaticTheme(theme, shouldSave = false) {
   document.documentElement.dataset.theme = theme;
+  updateThemeColor(theme);
 
   document.querySelectorAll("[data-static-theme-toggle]").forEach((button) => {
     const icon = button.querySelector(".theme-toggle__icon");
