@@ -1395,7 +1395,7 @@ h1 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
   width: min(100%, 980px);
-  margin: 0 auto;
+  margin: 18px auto 0;
 }
 
 .wallet-card {
