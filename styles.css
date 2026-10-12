@@ -1363,3 +1363,121 @@ h1 {
     transition-duration: 1ms !important;
   }
 }
+
+.content-lead {
+  max-width: 760px;
+  margin: 16px auto 0;
+  color: var(--muted);
+  font-size: clamp(1.05rem, 2vw, 1.22rem);
+  line-height: 1.65;
+}
+
+.donate-page {
+  gap: 24px;
+}
+
+.donate-intro-card {
+  border-color: color-mix(in srgb, var(--primary) 22%, var(--line));
+  background:
+    radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--primary) 10%, transparent), transparent 32%),
+    var(--surface);
+}
+
+.donate-note {
+  padding: 14px 16px;
+  border: 1px solid color-mix(in srgb, var(--primary) 24%, var(--line));
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--primary) 7%, transparent);
+}
+
+.donate-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  width: min(100%, 980px);
+  margin: 0 auto;
+}
+
+.wallet-card {
+  display: grid;
+  gap: 18px;
+  padding: 24px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: color-mix(in srgb, var(--surface) 94%, var(--surface-low));
+  box-shadow: var(--shadow-soft);
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.wallet-card:hover {
+  border-color: color-mix(in srgb, var(--primary) 24%, var(--line));
+  box-shadow: 0 22px 52px rgba(48, 18, 22, 0.12);
+  transform: translateY(-2px);
+}
+
+.wallet-card h2,
+.wallet-card p {
+  margin: 0;
+}
+
+.wallet-card h2 {
+  margin-top: 4px;
+  font-size: clamp(1.35rem, 3vw, 1.85rem);
+}
+
+.wallet-card p:not(.wallet-network) {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.wallet-network {
+  color: var(--primary);
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.wallet-card code {
+  display: block;
+  padding: 14px 16px;
+  overflow-wrap: anywhere;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface-low);
+  color: var(--text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.wallet-copy {
+  justify-self: start;
+}
+
+.donate-actions {
+  justify-content: center;
+}
+
+@media (max-width: 720px) {
+  .donate-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wallet-card {
+    padding: 20px;
+    border-radius: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wallet-card,
+  .wallet-copy {
+    transition: none;
+  }
+
+  .wallet-card:hover {
+    transform: none;
+  }
+}
