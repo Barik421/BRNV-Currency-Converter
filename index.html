@@ -8,6 +8,13 @@
   <meta name="robots" content="index, follow">
   <meta name="application-name" content="BRNV Currency Converter">
   <meta name="theme-color" content="#e63946">
+  <script>
+    try {
+      const brnvTheme = localStorage.getItem('brnvConverterTheme');
+      const brnvSystemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.dataset.theme = brnvTheme || brnvSystemTheme;
+    } catch {}
+  </script>
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
   <link rel="icon" type="image/png" sizes="48x48" href="/icons/favicon-48.png">
@@ -31,7 +38,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261012-donate">
+  <link rel="stylesheet" href="styles.css?v=20261012-theme-pages">
 
   <!-- Google Analytics 4 with Consent Mode v2 -->
   <script>
@@ -307,6 +314,6 @@
   </div>
 
   <script src="consent.js?v=20260501"></script>
-  <script src="script.js?v=20261012-donate"></script>
+  <script src="script.js?v=20261012-theme-pages"></script>
 </body>
 </html>
